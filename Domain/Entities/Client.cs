@@ -8,11 +8,11 @@ namespace Domain.Entities
 {
     public class Client : User
     {
-        
-        public int idClient {  get; set; }
         public string product { get; set; }
         public int purchase { get; set; }
-
-   
+        public Client()
+        {
+            
+        }
     }
 }
