@@ -15,7 +15,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IClientService, ClientService>();
+
+
+
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<IClientRepository, ClientRepository>();
 builder.Services.AddDbContext<ApplicationContext>(pepito => pepito.UseSqlite("Data Source = ecommerceDb"));
 
 var app = builder.Build();
