@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Domain.Entities
         public int purchase { get; set; }
         public Client()
         {
-            
+            UserRol = Rol.Client;
         }
     }
 }

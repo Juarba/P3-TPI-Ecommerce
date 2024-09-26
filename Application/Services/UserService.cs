@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,21 @@ namespace Application.Services
     public class UserService : IUserService
     {
 
-        private readonly IUserRepository _repository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService (IUserRepository repository)
+        public UserService (IUserRepository userRepository)
         {
-            _repository = repository;
+            _userRepository = userRepository;
+        }
+
+        public List<User> GetAll()
+        {
+            return _userRepository.Get();
+        }
+
+        public User AddUser(User user)
+        {
+            return _userRepository.Add(user);
         }
     }
 }

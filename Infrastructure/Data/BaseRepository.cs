@@ -9,23 +9,33 @@ namespace Infrastructure.Data
 {
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        List<T> items { get; set; }
-        public List<T> GetAll()
+        public readonly ApplicationContext _context;
+
+        protected BaseRepository(ApplicationContext context)
         {
-            return items;
+            _context = context;
+        }
+
+        public List<T> Get()
+        {
+            return _context.Set<T>().ToList() ;
         }
         public void Delete(T entity)
         {
-            items.Remove(entity);
-        }
-        public void Add(T entity)
-        {
-           items.Add(entity);
+            _context.Set<T>().Remove(entity);
         }
 
-        public void Update(T entity) { 
-        
-        
+        public T Add(T entity)
+        {
+            _context.Set<T>().Add(entity);
+            _context.SaveChanges();
+            return entity;
+        }
+
+        public void Update(T entity)
+        {
+
+
         }
     }
 }

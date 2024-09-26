@@ -10,5 +10,16 @@ namespace Infrastructure.Data
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
+
+        public UserRepository(ApplicationContext context) : base(context)
+        {
+           
+        }
+
+        public List<User> GetUserByName(string name)
+        {
+            return _context.Users.Where(p => p.Name == name).ToList();
+        }
+  
     }
 }
