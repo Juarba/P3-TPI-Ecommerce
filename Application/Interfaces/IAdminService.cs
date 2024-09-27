@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IClientService
+    public interface IAdminService
     {
-        List<Client> GetAll();
-        Client AddClient(Client client);
-
+        List<Admin> GetAll();
+        Admin AddAdmin(Admin admin);
     }
 }

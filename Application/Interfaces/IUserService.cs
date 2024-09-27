@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,8 @@ namespace Application.Interfaces
 {
     public interface IUserService
     {
+        List<User> GetAll();
+
+        User AddUser(User user);
     }
 }
