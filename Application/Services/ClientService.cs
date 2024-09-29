@@ -27,5 +27,10 @@ namespace Application.Services
         {
             return _clientRepository.Add(client);
         }
+
+        public Client AddClient(Client client)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
