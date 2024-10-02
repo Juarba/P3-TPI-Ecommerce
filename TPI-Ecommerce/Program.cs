@@ -14,14 +14,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IClientService, ClientService>();
-builder.Services.AddSingleton<ISaleOrderService,SaleOrderService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<ISaleOrderService,SaleOrderService>();
 
-builder.Services.AddSingleton<IUserRepository, UserRepository>();
-builder.Services.AddSingleton<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<ISaleOrderRepository, SaleOrderRepository>();
+
 builder.Services.AddDbContext<ApplicationContext>(pepito => pepito.UseSqlite("Data Source = ecommerceDb"));
-builder.Services.AddSingleton<ISaleOrderRepository, SaleOrderRepository>();
+
 
 var app = builder.Build();
 
