@@ -1,4 +1,5 @@
 ﻿using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace Infrastructure.Data
 {
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        public readonly ApplicationContext _context;
+        protected readonly DbContext _context;
 
-        protected BaseRepository(ApplicationContext context)
+        public BaseRepository(DbContext context)
         {
             _context = context;
         }
