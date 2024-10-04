@@ -8,15 +8,16 @@ namespace TPI_Ecommerce.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private readonly IClientService _clientService;
+        private readonly IClientService _service;
         public ClientController(IClientService clientService) 
         {
-            _clientService = clientService;
+            _service = clientService;
         }
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_clientService.GetAll()); 
+            return Ok(_service.GetAll()); 
         }
+
     }
 }

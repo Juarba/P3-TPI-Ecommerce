@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface ISaleOrderRepository:IBaseRepository<SaleOrder>
+    public interface ISaleOrderRepository : IBaseRepository<SaleOrder>
     {
-        List<SaleOrder> GetSaleOrderRepositoryById(int id);
+
     }
 }

@@ -11,6 +11,6 @@ namespace Application.Interfaces
     {
         List<User> GetAll();
 
-        User AddUser(User user);
+
     }
 }

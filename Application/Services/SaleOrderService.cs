@@ -23,10 +23,7 @@ namespace Application.Services
             return _saleOrderRepository.Get();
         }
 
-        public SaleOrder AddSaleOrder(SaleOrder order) 
-        {
-            return _saleOrderRepository.Add(order);
-        }
+       
 
     }
 }

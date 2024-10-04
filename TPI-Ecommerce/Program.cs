@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var conection = new SqliteConnection("Data source = DB-ej.db");
+var connection = new SqliteConnection("Data source = Eccomerce-TPI.db");
+connection.Open();
+
+builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => 
+    dbContextOptions.UseSqlite(connection, b => b.MigrationsAssembly("Infrastructure")));
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IClientService, ClientService>();
@@ -26,7 +31,7 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<ISaleOrderRepository, SaleOrderRepository>();
 
-builder.Services.AddDbContext<ApplicationContext>(pepito => pepito.UseSqlite(conection, b => b.MigrationsAssembly("Infrastructure")));
+
 
 
 var app = builder.Build();
