@@ -10,14 +10,11 @@ namespace Infrastructure.Data
 {
     public class SaleOrderRepository : BaseRepository<SaleOrder>, ISaleOrderRepository
     {
+        private readonly ApplicationContext _context;
         public SaleOrderRepository(ApplicationContext context) : base(context)
         {
+            _context = context;
 
-        }
-
-        public List<SaleOrder> GetSaleOrderRepositoryById(int id) 
-        {
-            return _context.SaleOrders.Where(x=>x.OrderId == id).ToList();
         }
     }
 }

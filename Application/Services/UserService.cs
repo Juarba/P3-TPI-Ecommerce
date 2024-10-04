@@ -12,21 +12,18 @@ namespace Application.Services
     public class UserService : IUserService
     {
 
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _repository;
 
-        public UserService (IUserRepository userRepository)
+        public UserService (IUserRepository repository)
         {
-            _userRepository = userRepository;
+            _repository = repository;
         }
 
         public List<User> GetAll()
         {
-            return _userRepository.Get();
+            return _repository.Get();
         }
 
-        public User AddUser(User user)
-        {
-            return _userRepository.Add(user);
-        }
+
     }
 }

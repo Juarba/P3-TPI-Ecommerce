@@ -10,6 +10,6 @@ namespace Application.Interfaces
     public interface IAdminService
     {
         List<Admin> GetAll();
-        Admin AddAdmin(Admin admin);
+    
     }
 }

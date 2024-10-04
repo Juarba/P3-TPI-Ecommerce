@@ -11,6 +11,6 @@ namespace Application.Interfaces
     {
         List<SaleOrder> GetAll();
 
-        SaleOrder AddSaleOrder(SaleOrder order);
+       
     }
 }

@@ -10,10 +10,10 @@ namespace Infrastructure.Data
 {
     public class AdminRepository : BaseRepository<Admin>, IAdminRepository
     {
-
+        private readonly ApplicationContext _context;
         public AdminRepository(ApplicationContext context) : base(context)
         {
-
+            _context = context;
         }
 
         public List<Admin> GetAdminByName(string name)

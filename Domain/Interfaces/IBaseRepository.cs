@@ -9,9 +9,10 @@ namespace Domain.Interfaces
     public interface IBaseRepository<T> where T : class
     {
         List<T> Get();
-        void Delete(T entity);
-        T Add(T entity);
+        T? Get<TId>(TId id);
+        void Add(T entity);
         void Update(T entity);
+        void Delete(T entity);
     }
 
 }

@@ -11,26 +11,58 @@ namespace Application.Services
 {
     public class ClientService : IClientService
     {
-        private readonly IClientRepository _clientRepository;
+        private readonly IClientRepository _repository;
 
-        public ClientService(IClientRepository clientRepository)
+        public ClientService(IClientRepository repository)
         {
-            _clientRepository = clientRepository;
+            _repository = repository;
         }
 
         public List<Client> GetAll()
         {
-            return _clientRepository.Get();
+            return _repository.Get();
         }
 
-        public Client Add(Client client)
+        public Client? Get(int id)
         {
-            return _clientRepository.Add(client);
+            return _repository.Get(id);
         }
 
-        public Client AddClient(Client client)
+        public List<Client> GetByName(string name) 
         {
-            throw new NotImplementedException();
+            return _repository.GetClientByName(name);
         }
+        public void Add(int id)
+        {
+            var clientAdd = _repository.Get(id);
+            if (clientAdd != null)
+            {
+                _repository.Add(clientAdd);   
+            }
+           
+        }
+
+        public void Update(int id)
+        {
+            var clientUpdate = _repository.Get(id);
+            if (clientUpdate != null)
+            {
+                _repository.Update(clientUpdate);
+            }
+        }
+
+        public void Delete(int id)
+        {
+            var clientDelete = _repository.Get(id);
+            if (clientDelete != null)
+            {
+                _repository.Delete(clientDelete);
+            }
+
+        }
+
+
+
+
     }
 }

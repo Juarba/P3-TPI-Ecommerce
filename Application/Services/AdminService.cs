@@ -23,9 +23,6 @@ namespace Application.Services
             return _adminRepository.Get();
         }
 
-        public Admin AddAdmin(Admin admin)
-        {
-            return _adminRepository.Add(admin);
-        }
+       
     }
 }

@@ -10,15 +10,16 @@ namespace Infrastructure.Data
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-
+        private readonly ApplicationContext _context;
         public UserRepository(ApplicationContext context) : base(context)
         {
+            _context = context;
            
         }
 
         public List<User> GetUserByName(string name)
         {
-            return _context.Users.Where(p => p.Name == name).ToList();
+            return _context.Users.Where(x => x.Name == name).ToList();
         }
   
     }
