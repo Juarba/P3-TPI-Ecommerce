@@ -16,9 +16,36 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public List<Admin> GetAdminByName(string name)
+        public Admin? GetAdminByName(string name)
         {
-            return _context.Admins.Where(x => x.Name == name).ToList();
+            return _context.Admins.FirstOrDefault(x => x.Name==name);
         }
-    }
+
+        public Admin Add(Admin admin)
+        {
+            _context.Admins.Add(admin);
+            _context.SaveChanges();
+            return admin;
+        }
+
+        public void Delete(Admin admin) 
+        {
+        _context.Remove(admin);
+        _context.SaveChanges();
+        }
+
+        public List<Admin> GetAll() 
+        { 
+            return _context.Admins.ToList();
+        }
+        public void Update(Admin admin)
+        {
+            _context.Update(admin);
+            _context.SaveChanges();
+        }
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
+    }   
 }
