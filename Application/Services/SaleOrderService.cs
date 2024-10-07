@@ -11,19 +11,51 @@ namespace Application.Services
 {
     public class SaleOrderService:ISaleOrderService
     {
-        private readonly ISaleOrderRepository _saleOrderRepository;
+        private readonly ISaleOrderRepository _repository;
 
-        public SaleOrderService(ISaleOrderRepository saleOrderRepository) 
+        public SaleOrderService(ISaleOrderRepository repository) 
         {
-            _saleOrderRepository = saleOrderRepository;
+            _repository = repository;
         }
 
         public List<SaleOrder> GetAll()
         {
-            return _saleOrderRepository.Get();
+            return _repository.Get();
         }
 
-       
+        public SaleOrder? Get(int id) 
+        { 
+        return _repository.Get(id);
+        }
+
+        public void Add(int id) 
+        {
+            var product =_repository.Get(id);
+            if (product is not null) 
+            {
+                _repository.Add(product);
+            }
+        }
+
+        public void Update(int id) 
+        {
+            var product = _repository.Get(id);
+
+            if (product is not null) 
+            {
+                _repository.Update(product);
+            }
+        }
+
+        public void Delete(int id) 
+        {
+            var product = _repository.Get(id);
+            if(product is not null) 
+            {
+                _repository.Delete(product);
+            }
+        }
+
 
     }
 }
