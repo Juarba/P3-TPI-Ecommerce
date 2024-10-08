@@ -25,7 +25,7 @@ namespace TPI_Ecommerce.Controllers
             return Ok(_service.Get(id));
         }
 
-        [HttpGet]
+        [HttpGet("id")]
         public IActionResult GetAll() 
         {
             return Ok(_service.GetAll());
