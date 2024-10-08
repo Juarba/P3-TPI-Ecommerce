@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Models;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace Application.Interfaces
     {
         List<SaleOrder> GetAll();
         SaleOrder? Get(int id);
-        void Add(int id);
-        void Update(int id);
+        void Add(SaleOrderCreateDTO createSaleOrder);
+        void Update(int id,SaleOrderUpdateDTO update);
         void Delete(int id);
 
     }

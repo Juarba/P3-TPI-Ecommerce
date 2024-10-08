@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;
@@ -28,23 +29,40 @@ namespace Application.Services
         return _repository.Get(id);
         }
 
-        public void Add(int id) 
+        public void Add(SaleOrderCreateDTO createSaleOrder) 
         {
-            var product =_repository.Get(id);
-            if (product is not null) 
+            
+
+            SaleOrder saleOrder = new SaleOrder()
             {
-                _repository.Add(product);
-            }
+                Price = createSaleOrder.Price,
+                Shipment = createSaleOrder.Shipment,
+                PaymentMethod = createSaleOrder.PaymentMethod,
+                client = createSaleOrder.client
+            };
+                _repository.Add(saleOrder);
+            
         }
 
-        public void Update(int id) 
+        public void Update(int id, SaleOrderUpdateDTO update) 
         {
             var product = _repository.Get(id);
+            if (product is null)
+                throw new Exception("Objeto no encontrado");
 
-            if (product is not null) 
-            {
+            if(update.Price!=0)
+                product.Price=update.Price;
+
+            if(update.Shipment is not null)
+                product.Shipment=(bool)update.Shipment;
+
+            if(update.PaymentMethod != string.Empty)
+                product.PaymentMethod=update.PaymentMethod;
                 _repository.Update(product);
-            }
+
+            if(update.client is not null)
+                product.client=(Client)update.client;
+            
         }
 
         public void Delete(int id) 
