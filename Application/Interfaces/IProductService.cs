@@ -1,4 +1,5 @@
 ﻿
+using Application.Models;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;
@@ -15,7 +16,7 @@ namespace Application.Interfaces
         Product? Get(int id);
         
         List<Product> GetByName(string name);
-        void Add(int id);
+        void Add(ProductCreateDto productDto);
         void Update(int id);
         void Delete(int id);
         

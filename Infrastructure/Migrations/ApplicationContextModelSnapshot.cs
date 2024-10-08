@@ -36,12 +36,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Stock")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("adminId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("adminId");
 
                     b.ToTable("Products");
                 });
@@ -122,25 +117,14 @@ namespace Infrastructure.Migrations
                 {
                     b.HasBaseType("Domain.Entities.User");
 
-                    b.Property<string>("product")
+                    b.Property<string>("Product")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("purchase")
+                    b.Property<int>("Purchase")
                         .HasColumnType("INTEGER");
 
                     b.HasDiscriminator().HasValue("Client");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Product", b =>
-                {
-                    b.HasOne("Domain.Entities.Admin", "admin")
-                        .WithMany()
-                        .HasForeignKey("adminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("admin");
                 });
 
             modelBuilder.Entity("Domain.Entities.SaleOrder", b =>
