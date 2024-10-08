@@ -9,8 +9,8 @@ namespace Domain.Entities
 {
     public class Client : User
     {
-        public string product { get; set; }
-        public int purchase { get; set; }
+        public string Product { get; set; }
+        public int Purchase { get; set; }
         public Client()
         {
             UserRol = Rol.Client;

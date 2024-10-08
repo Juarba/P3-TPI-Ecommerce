@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Application.Services
 {
@@ -32,14 +34,20 @@ namespace Application.Services
         {
             return _repository.GetClientByName(name);
         }
-        public void Add(int id)
+        public void Add(ClientCreateDto clientDto)
         {
-            var clientAdd = _repository.Get(id);
-            if (clientAdd != null)
+            var client = new Client()
             {
-                _repository.Add(clientAdd);   
-            }
-           
+                Name = clientDto.Name,
+                LastName = clientDto.LastName,
+                Email = clientDto.Email,
+                Password = clientDto.Password,
+                UserRol = clientDto.UserRole,
+                Product = clientDto.Product,
+                Purchase = clientDto.Purchase
+            };
+
+            _repository.Add(client);
         }
 
         public void Update(int id)
