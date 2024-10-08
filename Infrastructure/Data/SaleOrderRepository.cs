@@ -16,5 +16,10 @@ namespace Infrastructure.Data
             _context = context;
 
         }
+
+        public SaleOrder? Get(int id)
+        {
+            return _context.SaleOrders.FirstOrDefault(p => p.Id == id);
+        }
     }
 }

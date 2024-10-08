@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Models;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Application.Interfaces
         List<Client> GetAll();
         Client? Get(int id);
         List<Client> GetByName(string name);
-        void Add(int id);
+        void Add(ClientCreateDto clientDto);
         void Update(int id);
         void Delete(int id);
 

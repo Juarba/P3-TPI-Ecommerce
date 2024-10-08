@@ -9,6 +9,6 @@ namespace Domain.Interfaces
 {
     public interface ISaleOrderRepository : IBaseRepository<SaleOrder>
     {
-
+        SaleOrder? Get(int id);
     }
 }
