@@ -31,5 +31,24 @@ namespace TPI_Ecommerce.Controllers
             return Ok("Product added succesfully");
 
         }
+
+        [HttpPut("Update/{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] ProductUpdateDto productUpdate)
+        {
+            _service.Update(id, productUpdate);
+            return Ok("Product modified succesfully");
+        }
+
+        [HttpDelete("Delete/{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var existingProduct = _service.Get(id);
+            if (existingProduct == null)
+            {
+                return NotFound($"No se encontró ningún Producto con el ID: {id}");
+            }
+            _service.Delete(id);
+            return Ok($"Producto con ID: {id} eliminado");
+        }
     }
 }

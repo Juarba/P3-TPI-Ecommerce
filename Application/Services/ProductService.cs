@@ -47,12 +47,15 @@ namespace Application.Services
             _repository.Add(product);
         }
 
-        public void Update(int id)
+        public void Update(int id, ProductUpdateDto update)
         {
-            var productUpdate = _repository.Get(id);
-            if (productUpdate != null)
+            var product = _repository.Get(id);
+            if (product is not null)
             {
-                _repository.Update(productUpdate);
+                product.Price = update.Price;
+                product.Stock = update.Stock;
+
+                _repository.Update(product);
             }
         }
 
