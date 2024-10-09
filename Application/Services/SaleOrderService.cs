@@ -48,7 +48,7 @@ namespace Application.Services
         {
             var product = _repository.Get(id);
             if (product is null)
-                throw new Exception("Objeto no encontrado");
+                throw new Exception();
 
             if(update.Price!=0)
                 product.Price=update.Price;
