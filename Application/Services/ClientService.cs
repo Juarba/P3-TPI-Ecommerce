@@ -43,8 +43,6 @@ namespace Application.Services
                 Email = clientDto.Email,
                 Password = clientDto.Password,
                 UserRol = clientDto.UserRole,
-                Product = clientDto.Product,
-                Purchase = clientDto.Purchase
             };
 
             _repository.Add(client);

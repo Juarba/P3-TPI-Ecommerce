@@ -15,6 +15,7 @@ namespace Infrastructure.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<SaleOrder> SaleOrders { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<SaleOrderDetail> SaleOrderDetails { get; set; }
 
 
 

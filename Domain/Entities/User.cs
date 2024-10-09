@@ -1,5 +1,4 @@
-﻿using Domain.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
@@ -13,7 +12,7 @@ namespace Domain.Entities
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public Rol UserRol { get; set; }
+        public string UserRol { get; set; }
     }
 }
 
