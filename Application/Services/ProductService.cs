@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;
@@ -33,21 +34,28 @@ namespace Application.Services
         {
             return _repository.GetProductByName(name);
         }
-        public void Add(int id)
+        public void Add(ProductCreateDto productDto)
         {
-            var productAdd = _repository.Get(id);
-            if (productAdd != null)
+            var product = new Product()
             {
-                _repository.Add(productAdd);
-            }    
+                Name = productDto.Name,
+                Description = productDto.Description,
+                Price = productDto.Price,
+                Stock = productDto.Stock
+            };
+
+            _repository.Add(product);
         }
 
-        public void Update(int id)
+        public void Update(int id, ProductUpdateDto update)
         {
-            var productUpdate = _repository.Get(id);
-            if (productUpdate != null)
+            var product = _repository.Get(id);
+            if (product is not null)
             {
-                _repository.Update(productUpdate);
+                product.Price = update.Price;
+                product.Stock = update.Stock;
+
+                _repository.Update(product);
             }
         }
 

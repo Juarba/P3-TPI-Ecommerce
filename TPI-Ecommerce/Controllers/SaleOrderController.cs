@@ -26,13 +26,13 @@ namespace TPI_Ecommerce.Controllers
             return Ok(_service.Get(id));
         }
 
-        [HttpGet("GetAll/{id}")]
+        [HttpGet("GetAll")]
         public IActionResult GetAll() 
         {
             return Ok(_service.GetAll());
         }
 
-        [HttpPost("Add/{id}")]
+        [HttpPost("Add")]
         public IActionResult Post([FromBody] SaleOrderCreateDTO saleOrderCreate)
         {
             _service.Add(saleOrderCreate);

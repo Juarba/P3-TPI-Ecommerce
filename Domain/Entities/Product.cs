@@ -17,6 +17,6 @@ namespace Domain.Entities
         public float Price { get; set; }
         public string Name { get; set; }
         public int Stock { get; set; }
-        public Admin admin { get; set; }
+
     }
 }
