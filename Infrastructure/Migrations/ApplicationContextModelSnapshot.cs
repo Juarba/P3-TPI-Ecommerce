@@ -83,9 +83,6 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("SaleOrderId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");

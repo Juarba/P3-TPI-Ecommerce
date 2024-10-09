@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241009192127_EntitiesChanges")]
-    partial class EntitiesChanges
+    [Migration("20241009201055_EntitiesChange")]
+    partial class EntitiesChange
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,9 +85,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<int?>("SaleOrderId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
