@@ -35,7 +35,6 @@ namespace Application.Services
 
             SaleOrder saleOrder = new SaleOrder()
             {
-                Price = createSaleOrder.Price,
                 Shipment = createSaleOrder.Shipment,
                 PaymentMethod = createSaleOrder.PaymentMethod,
                 client = createSaleOrder.client
@@ -48,10 +47,9 @@ namespace Application.Services
         {
             var product = _repository.Get(id);
             if (product is null)
-                throw new Exception("Objeto no encontrado");
+                throw new Exception();
 
-            if(update.Price!=0)
-                product.Price=update.Price;
+
 
             if(update.Shipment is not null)
                 product.Shipment=(bool)update.Shipment;

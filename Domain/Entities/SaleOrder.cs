@@ -13,10 +13,11 @@ namespace Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int Price { get; set; }
+        public decimal Total { get; set; }
         public bool Shipment { get; set; }
         public string PaymentMethod { get; set; }
         public Client client { get; set; }
+        public List<SaleOrderDetail> SaleOrderDetails { get; set; }
 
 
     }

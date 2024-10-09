@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class SaleOrderRepository : BaseRepository<SaleOrder>, ISaleOrderRepository
+    public class SaleOrderDetailRepository : BaseRepository<SaleOrderDetail> , ISaleOrderDetailRepository
     {
         private readonly ApplicationContext _context;
-        public SaleOrderRepository(ApplicationContext context) : base(context)
+
+        public SaleOrderDetailRepository(ApplicationContext context) : base(context) 
         {
             _context = context;
-
         }
+        
     }
 }

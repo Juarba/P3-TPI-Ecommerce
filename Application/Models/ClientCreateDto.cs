@@ -1,4 +1,4 @@
-﻿using Domain.Enums;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,7 +23,7 @@ namespace Application.Models
         [Required]
         public int Purchase { get; set; }
         [Required]
-        public Rol UserRole { get; set; }
+        public string UserRole { get; set; }
         
     }
 }

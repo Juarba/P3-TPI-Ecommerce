@@ -20,10 +20,14 @@ namespace TPI_Ecommerce.Controllers
         public IActionResult Get(int id) 
         {
             if (id <= 0) 
-            {
                 return BadRequest("Id incorrecto");
-            }
-            return Ok(_service.Get(id));
+            
+            var product = _service.Get(id);
+
+            if (product is null)
+                return NotFound("Orden no encontrada");
+
+            return Ok(product);
         }
 
         [HttpGet("GetAll")]
@@ -43,9 +47,8 @@ namespace TPI_Ecommerce.Controllers
         public IActionResult Delete(int id) 
         {
             if(_service.Get(id) is null)
-            {
                 return NotFound("No se encontro la Orden");
-            }
+            
             _service.Delete(id);
             return Ok("Orden eliminada exitosamente");
         }
@@ -53,8 +56,15 @@ namespace TPI_Ecommerce.Controllers
         [HttpPut("Update/{id}")]
         public IActionResult Update([FromRoute] int id,[FromBody] SaleOrderUpdateDTO saleOrderUpdate)
         {
-            _service.Update(id, saleOrderUpdate);
-            return Ok("Orden modificada exitosamente");
+            try
+            {
+                _service.Update(id, saleOrderUpdate);
+                return Ok("Orden modificada exitosamente");
+            }
+            catch 
+            {
+                return NotFound("Objeto no encontrado");
+            }
         }
     }
 }
