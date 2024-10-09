@@ -31,7 +31,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<ISaleOrderRepository, SaleOrderRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();    
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ISaleOrderDetailRepository, SaleOrderDetailRepository>();
 
 
 
