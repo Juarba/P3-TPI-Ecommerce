@@ -14,7 +14,7 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int Amount { get; set; }
-        public decimal UnitPrice { get; set; }
+        
         public Product Product { get; set; }
     }
 }
