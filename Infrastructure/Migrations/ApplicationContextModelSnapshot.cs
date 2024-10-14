@@ -39,7 +39,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.SaleOrder", b =>
@@ -65,7 +65,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("clientId");
 
-                    b.ToTable("SaleOrders");
+                    b.ToTable("SaleOrders", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.SaleOrderDetail", b =>
@@ -92,7 +92,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("SaleOrderId");
 
-                    b.ToTable("SaleOrderDetails");
+                    b.ToTable("SaleOrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -128,7 +128,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasDiscriminator().HasValue("User");
 

@@ -16,9 +16,10 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public List<Admin> GetAdminByName(string name)
+        public Admin? Get(string name)
         {
-            return _context.Admins.Where(x => x.Name == name).ToList();
+            return _context.Admins.FirstOrDefault(x => x.Name == name);
         }
     }
+    
 }
