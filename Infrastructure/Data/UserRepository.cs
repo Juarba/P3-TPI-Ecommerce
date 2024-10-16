@@ -21,6 +21,10 @@ namespace Infrastructure.Data
         {
             return _context.Users.Where(x => x.Name == name).ToList();
         }
-  
+        public User? GetUserByEmail(string email)
+        {
+            return _context.Users.SingleOrDefault(x => x.Email == email);
+        }
+
     }
 }

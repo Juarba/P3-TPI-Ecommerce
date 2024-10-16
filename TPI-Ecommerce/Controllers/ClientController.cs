@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,12 +16,14 @@ namespace TPI_Ecommerce.Controllers
             _service = clientService;
         }
         [HttpGet]
+        [Authorize]
         public IActionResult GetAll()
         {
             return Ok(_service.GetAll());
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public IActionResult GetById(int id)
         {
             var client = _service.Get(id);
@@ -34,6 +37,7 @@ namespace TPI_Ecommerce.Controllers
 
 
         [HttpPost]
+      
         public IActionResult AddClient([FromBody] ClientCreateDto client)
         {
             _service.Add(client);
@@ -42,6 +46,7 @@ namespace TPI_Ecommerce.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult DeleteClient(int id)
         {
             var client = _service.Get(id);
