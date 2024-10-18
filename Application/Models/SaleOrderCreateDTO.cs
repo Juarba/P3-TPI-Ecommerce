@@ -11,12 +11,8 @@ namespace Application.Models
     public class SaleOrderCreateDTO
     {
         [Required]
-        public int Price { get; set; }
-        [Required]
-        public bool Shipment { get; set; }
+        public int ClientId { get; set; }
         [Required]
         public string PaymentMethod { get; set; }
-        [Required]
-        public Client client { get; set; }
     }
 }
