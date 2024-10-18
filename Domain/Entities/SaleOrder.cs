@@ -16,8 +16,14 @@ namespace Domain.Entities
         public decimal Total { get; set; }
         public bool Shipment { get; set; }
         public string PaymentMethod { get; set; }
-        public Client client { get; set; }
-        public List<SaleOrderDetail> SaleOrderDetails { get; set; }
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
+        public ICollection<SaleOrderDetail> SaleOrderDetails { get; set; } = new List<SaleOrderDetail>();
+
+        public void CalculateTotal()
+        {
+            Total = SaleOrderDetails.Sum(s => s.Amount * s.UnitPrice);
+        }
 
 
     }

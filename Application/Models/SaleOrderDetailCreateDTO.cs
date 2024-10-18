@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace Application.Models
 {
-    public class ProductUpdateDto
+    public class SaleOrderDetailCreateDTO
     {
         [Required]
-        public decimal Price { get; set; }
+        public int SaleOrderId { get; set; }
         [Required]
-        public int Stock { get; set; }
+        public int ProductId { get; set; }
+        [Required]
+        public int Amount { get; set; }
     }
 }

@@ -18,55 +18,55 @@ namespace TPI_Ecommerce.Controllers
             _service = service;
         }
 
-        [HttpGet("Get/{id}")]
-        public IActionResult Get(int id) 
+        [HttpGet("{id}")]
+        public IActionResult GetById([FromRoute] int id)
         {
-            if (id <= 0) 
-                return BadRequest("Id incorrecto");
-            
-            var product = _service.Get(id);
+            var saleOrder = _service.Get(id);
+            if (saleOrder == null)
+            {
+                return NotFound();
+            }
+            return Ok(saleOrder);
 
-            if (product is null)
-                return NotFound("Orden no encontrada");
-
-            return Ok(product);
         }
 
-        [HttpGet("GetAll")]
-        public IActionResult GetAll() 
+        [HttpGet("by-client/{clientId}")]
+        public IActionResult GetAllByClient([FromRoute] int clientId)
         {
-            return Ok(_service.GetAll());
+            var saleOrders = _service.GetAllByClient(clientId);
+            return Ok(saleOrders);
         }
 
-        [HttpPost("Add")]
-        public IActionResult Post([FromBody] SaleOrderCreateDTO saleOrderCreate)
+        [HttpPost]
+        public IActionResult Add([FromBody] SaleOrderCreateDTO saleOrderCreate)
         {
             _service.Add(saleOrderCreate);
-            return Ok("Orden agregada exitosamente");
+            return Ok("Creada la venta para el cliente");
         }
 
         [HttpDelete("Delete/{id}")]
-        public IActionResult Delete(int id) 
+        public IActionResult Delete(int id)
         {
-            if(_service.Get(id) is null)
+            if (_service.Get(id) is null)
                 return NotFound("No se encontro la Orden");
-            
+
             _service.Delete(id);
             return Ok("Orden eliminada exitosamente");
         }
 
         [HttpPut("Update/{id}")]
-        public IActionResult Update([FromRoute] int id,[FromBody] SaleOrderUpdateDTO saleOrderUpdate)
+        public IActionResult Update([FromRoute] int id, [FromBody] SaleOrderUpdateDTO saleOrderUpdate)
         {
             try
             {
                 _service.Update(id, saleOrderUpdate);
                 return Ok("Orden modificada exitosamente");
             }
-            catch 
+            catch
             {
                 return NotFound("Objeto no encontrado");
             }
         }
     }
 }
+

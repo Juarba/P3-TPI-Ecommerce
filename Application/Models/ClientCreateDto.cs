@@ -18,10 +18,6 @@ namespace Application.Models
         [Required]
         public string Password { get; set; }
         [Required]
-        public string Product { get; set; }
-        [Required]
-        public int Purchase { get; set; }
-        [Required]
         public string UserRole { get; set; }
         
     }

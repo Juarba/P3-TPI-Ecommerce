@@ -20,6 +20,27 @@ namespace Infrastructure.Data
 
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+         
+
+            modelBuilder.Entity<User>().HasDiscriminator(u => u.UserRol);
+
+            modelBuilder.Entity<Client>()
+                .HasMany(s => s.SaleOrders)
+                .WithOne(c => c.Client);
+
+            modelBuilder.Entity<SaleOrder>()
+                .HasMany(o => o.SaleOrderDetails)
+                .WithOne(s => s.SaleOrder);
+
+            modelBuilder.Entity<SaleOrderDetail>()
+                .HasOne(p => p.Product)
+                .WithOne();
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 
 

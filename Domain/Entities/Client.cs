@@ -8,6 +8,6 @@ namespace Domain.Entities
 {
     public class Client : User
     {
-       public List<SaleOrder> SaleOrders { get; set; }
+       public ICollection<SaleOrder> SaleOrders { get; set; } = new List<SaleOrder>();
     }
 }
