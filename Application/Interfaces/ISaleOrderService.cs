@@ -10,7 +10,7 @@ namespace Application.Interfaces
 {
     public interface ISaleOrderService
     {
-        List<SaleOrder> GetAll();
+        List<SaleOrder> GetAllByClient(int clientId);
         SaleOrder? Get(int id);
         void Add(SaleOrderCreateDTO createSaleOrder);
         void Update(int id,SaleOrderUpdateDTO update);

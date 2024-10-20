@@ -39,7 +39,6 @@ namespace Application.Services
             var product = new Product()
             {
                 Name = productDto.Name,
-                Description = productDto.Description,
                 Price = productDto.Price,
                 Stock = productDto.Stock
             };

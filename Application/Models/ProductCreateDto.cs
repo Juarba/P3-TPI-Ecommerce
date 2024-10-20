@@ -13,9 +13,7 @@ namespace Application.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Description { get; set; }
-        [Required]
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         [Required]
         public int Stock {  get; set; }
     }

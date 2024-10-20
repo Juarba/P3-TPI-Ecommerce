@@ -19,9 +19,9 @@ namespace Application.Services
             _repository = repository;
         }
 
-        public List<SaleOrder> GetAll()
+        public List<SaleOrder> GetAllByClient(int clientId)
         {
-            return _repository.Get();
+            return _repository.GetAllByClient(clientId);
         }
 
         public SaleOrder? Get(int id) 
@@ -31,15 +31,13 @@ namespace Application.Services
 
         public void Add(SaleOrderCreateDTO createSaleOrder) 
         {
-            
-
             SaleOrder saleOrder = new SaleOrder()
             {
-                Shipment = createSaleOrder.Shipment,
+                ClientId = createSaleOrder.ClientId,
                 PaymentMethod = createSaleOrder.PaymentMethod,
-                client = createSaleOrder.client
             };
-                _repository.Add(saleOrder);
+            
+            _repository.Add(saleOrder);
             
         }
 
@@ -57,7 +55,7 @@ namespace Application.Services
                 _repository.Update(product);
 
             if(update.client is not null)
-                product.client=(Client)update.client;
+                product.Client=(Client)update.client;
             
         }
 

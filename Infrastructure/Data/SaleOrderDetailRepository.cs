@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,28 @@ namespace Infrastructure.Data
             _context = context;
         }
 
+        public List<SaleOrderDetail> GetAllBySaleOrder(int saleOrderId)
+        {
+            return _context.SaleOrderDetails
+                .Include(p => p.Product)
+                .Include(s => s.SaleOrder)
+                .ThenInclude(c => c.Client)
+                .Where(x => x.Id == saleOrderId)
+                .ToList();
+        }
+
+        public List<SaleOrderDetail> GetAllByProduct(int productId)
+        {
+            return _context.SaleOrderDetails
+                .Include(p => p.Product)
+                .Include(s => s.SaleOrder)
+                .ThenInclude(c => c.Client)
+                .Where(x => x.Id == productId)
+                .ToList();
+        }
     }
+
 }
+
+   
+
