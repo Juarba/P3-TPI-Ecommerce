@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,11 @@ namespace Application.Services
             {
                 _repository.Delete(productDelete);
             }
+        }
+
+        public StockStatus CheckStock(int id)
+        {
+            return _repository.CheckStock(id);
         }
     }
 }

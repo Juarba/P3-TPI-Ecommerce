@@ -1,6 +1,7 @@
 ﻿
 using Application.Models;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Application.Interfaces
         void Add(ProductCreateDto productDto);
         void Update(int id, ProductUpdateDto productDto);
         void Delete(int id);
-        
+
+        StockStatus CheckStock(int id);
     }
 }
