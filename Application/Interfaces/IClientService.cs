@@ -14,7 +14,7 @@ namespace Application.Interfaces
         Client? Get(int id);
         List<Client> GetByName(string name);
         void Add(ClientCreateDto clientDto);
-        void Update(int id);
+        void Update(int id, ClientUpdateDto dto);
         void Delete(int id);
 
     }

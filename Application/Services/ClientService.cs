@@ -48,11 +48,15 @@ namespace Application.Services
             _repository.Add(client);
         }
 
-        public void Update(int id)
+        public void Update(int id, ClientUpdateDto dto)
         {
             var clientUpdate = _repository.Get(id);
             if (clientUpdate != null)
             {
+                clientUpdate.Name = dto.Name;
+                clientUpdate.LastName = dto.LastName;
+                clientUpdate.Email = dto.Email;
+
                 _repository.Update(clientUpdate);
             }
         }
