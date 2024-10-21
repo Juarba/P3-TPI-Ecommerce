@@ -19,37 +19,66 @@ namespace TPI_Ecommerce.Controllers
         {
             _service = service;
         }
+
+        private bool IsUserInRol(string rol)
+        {
+            var claimsRol = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role);
+            return claimsRol is not null && claimsRol.Value == rol;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_service.GetAll());
+            if(IsUserInRol("Client") || IsUserInRol("Admin"))
+            {
+                return Ok(_service.GetAll());
+            }
+            return Forbid();
         }
 
         [HttpPost]
         public IActionResult AddProduct([FromBody] ProductCreateDto product)
         {
-            _service.Add(product);
-            return Ok("Product added succesfully");
-
+           if(IsUserInRol("Admin"))
+            {
+                _service.Add(product);
+                return Ok("Product added succesfully");
+            }
+            return Forbid();
         }
 
         [HttpPut("Update/{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] ProductUpdateDto productUpdate)
         {
-            _service.Update(id, productUpdate);
-            return Ok("Product modified succesfully");
+            var product = _service.Get(id);
+            if(product is null)
+            {
+                return NotFound($"No se encontro el producto con el ID: {id}");
+            }
+
+            if (IsUserInRol("Admin"))
+            {
+                _service.Update(id, productUpdate);
+                return Ok("Product modified succesfully");
+            }
+            return Forbid();
         }
+        
 
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
-            var existingProduct = _service.Get(id);
-            if (existingProduct == null)
+            if (IsUserInRol("Admin"))
             {
-                return NotFound($"No se encontró ningún Producto con el ID: {id}");
+                var existingProduct = _service.Get(id);
+                if (existingProduct == null)
+                {
+                    return NotFound($"No se encontró ningún Producto con el ID: {id}");
+                }
+                _service.Delete(id);
+                return Ok($"Producto con ID: {id} eliminado");
             }
-            _service.Delete(id);
-            return Ok($"Producto con ID: {id} eliminado");
+            return Forbid();
         }
     }
 }

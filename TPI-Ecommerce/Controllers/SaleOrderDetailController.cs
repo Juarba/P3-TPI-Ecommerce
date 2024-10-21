@@ -13,10 +13,15 @@ namespace TPI_Ecommerce.Controllers
     public class SaleOrderDetailController : ControllerBase
     {
         private readonly ISaleOrderDetailService _saleOrderDetailService;
+        private readonly ISaleOrderService _saleOrderService;
+        private readonly IProductService _productService;
 
-        public SaleOrderDetailController(ISaleOrderDetailService saleOrderDetailService)
+
+        public SaleOrderDetailController(ISaleOrderDetailService saleOrderDetailService, ISaleOrderService saleOrderService, IProductService productService)
         {
             _saleOrderDetailService = saleOrderDetailService;
+            _saleOrderService = saleOrderService;
+            _productService = productService;
         }
 
         [HttpGet("saleOrder/{saleOrderId}")]

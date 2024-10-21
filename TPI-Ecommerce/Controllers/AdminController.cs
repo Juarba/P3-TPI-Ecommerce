@@ -18,37 +18,60 @@ namespace TPI_Ecommerce.Controllers
         {
             _service = service;
         }
+
+        private bool IsUserInRol(string rol)
+        {
+            var claimsRol = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role);
+            return claimsRol is not null && claimsRol.Value == rol;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_service.GetAll());
+            if(IsUserInRol("Admin"))
+            {
+                return Ok(_service.GetAll());
+
+            }
+            return Forbid();
         }
 
         [HttpPost]
         public IActionResult Add([FromBody] AdminCreateDto admin)
         {
-            _service.Add(admin);
-            return Ok("Admin added succesfully");
-
+            if(IsUserInRol("Admin"))
+            {
+                _service.Add(admin);
+                return Ok("Admin added succesfully");
+            }
+            return Forbid();
         }
 
         [HttpPut("Update/{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] AdminUpdateDto adminUpdate)
         {
-            _service.Update(id, adminUpdate);
-            return Ok("Admin modified succesfully");
+            if(IsUserInRol("Admin"))
+            {
+                _service.Update(id, adminUpdate);
+                return Ok("Admin modified succesfully");
+            }
+            return Forbid();
         }
 
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
-            var existingAdmin = _service.Get(id);
-            if (existingAdmin == null)
+            if(IsUserInRol("Admin"))
             {
-                return NotFound($"No se encontró ningún Admin con el ID: {id}");
+                var existingAdmin = _service.Get(id);
+                if (existingAdmin == null)
+                {
+                    return NotFound($"No se encontró ningún Admin con el ID: {id}");
+                }
+                _service.Delete(id);
+                return Ok($"Admin con ID: {id} eliminado");
             }
-            _service.Delete(id);
-            return Ok($"Admin con ID: {id} eliminado");
+            return Forbid();
         }
     }
 }
