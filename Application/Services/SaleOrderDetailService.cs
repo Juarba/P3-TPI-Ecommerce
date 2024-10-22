@@ -83,10 +83,7 @@ namespace Application.Services
         public void Add(SaleOrderDetailCreateDTO dto)
         {
             var product = _productRepository.Get(dto.ProductId);
-            if(product is null)
-            {
-                throw new NotAllowedException("No se encontro el producto");
-            }
+            
 
             var saleOrderDetail = new SaleOrderDetail()
             {

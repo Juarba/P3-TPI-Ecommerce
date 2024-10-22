@@ -76,8 +76,10 @@ namespace TPI_Ecommerce.Controllers
             {
                 return NotFound($"No se encontro el producto con el ID {dto.ProductId}");
             }
-
+            
             _saleOrderDetailService.Add(dto);
+            
+            
             return Ok("La linea de venta fue agregada");        
         }
 
@@ -89,9 +91,13 @@ namespace TPI_Ecommerce.Controllers
                 _saleOrderDetailService.Update(id, dto);
                 return NoContent();
             }
-            catch (NotAllowedException ex)
+            catch (NotAllowedException e)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(e.Message);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500,"Ocurrio un error inesperado");
             }
         }
 

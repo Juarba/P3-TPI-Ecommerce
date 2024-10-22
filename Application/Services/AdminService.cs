@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -57,7 +58,11 @@ namespace Application.Services
         public void Update(int id, AdminUpdateDto update)
         {
             var adminToUpdate = _repository.Get(id);
-            if (adminToUpdate != null)
+
+            if (adminToUpdate is null)
+                throw new NotAllowedException();
+
+            if (adminToUpdate is not null)
             {
                 adminToUpdate.Email = update.Email;
                 adminToUpdate.Password = update.Password;
