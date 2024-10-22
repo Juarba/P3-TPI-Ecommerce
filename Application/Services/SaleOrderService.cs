@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.Models.Responses;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;
@@ -19,14 +20,67 @@ namespace Application.Services
             _repository = repository;
         }
 
-        public List<SaleOrder> GetAllByClient(int clientId)
+        public List<SaleOrderResponseDTO> GetAllByClient(int clientId)
         {
-            return _repository.GetAllByClient(clientId);
+            var saleOrders = _repository.GetAllByClient(clientId);
+            return saleOrders.Select(s => new SaleOrderResponseDTO
+            {
+                Id = s.Id,
+                Total = s.Total,
+                PaymentMethod = s.PaymentMethod,
+                Client = new ClientResponseDTO
+                {
+                    Id = s.Client.Id,
+                    Name = s.Client.Name,
+                    LastName = s.Client.LastName,
+                },
+                SaleOrderDetails = s.SaleOrderDetails.Select(d => new SaleOrderDetailResponseDTO
+                {
+                    Id = d.Id,
+                    Amount = d.Amount,
+                    Product = new ProductResponseDTO
+                    {
+                        Id = d.Product.Id,
+                        Name = d.Product.Name,
+                        Price = d.Product.Price,
+                    }
+                }).ToList()
+
+            }).ToList();
         }
 
-        public SaleOrder? Get(int id) 
-        { 
-        return _repository.Get(id);
+        public SaleOrderResponseDTO? Get(int id) 
+        {
+            var saleOrder = _repository.Get(id);
+            if(saleOrder is null)
+            {
+                return null;
+            }
+            return new SaleOrderResponseDTO
+            {
+                Id = saleOrder.Id,
+                Total = saleOrder.Total,
+                PaymentMethod = saleOrder.PaymentMethod,
+                Client = new ClientResponseDTO
+                {
+                    Id = saleOrder.Client.Id,
+                    Name = saleOrder.Client.Name,
+                    LastName = saleOrder.Client.LastName,
+
+                },
+                SaleOrderDetails = saleOrder.SaleOrderDetails.Select(s => new SaleOrderDetailResponseDTO
+                {
+                    Id = s.Id,
+                    Amount = s.Amount,
+                    Product = new ProductResponseDTO
+                    {
+                        Id = s.Product.Id,
+                        Name = s.Product.Name,
+                        Price = s.Product.Price
+                    }
+
+                }).ToList()
+            };
         }
 
         public void Add(SaleOrderCreateDTO createSaleOrder) 

@@ -30,7 +30,12 @@ namespace Infrastructure.Data
 
         public SaleOrder? Get(int id)
         {
-            return _context.SaleOrders.FirstOrDefault(p => p.Id == id);
+            return _context.SaleOrders
+                .Include(cl => cl.Client)
+                .Include(s => s.SaleOrderDetails)
+                .ThenInclude(p => p.Product)
+                .FirstOrDefault(x => x.Id == id);
+
         }
     }
 }

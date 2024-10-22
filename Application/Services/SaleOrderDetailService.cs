@@ -1,4 +1,6 @@
-﻿using Application.Models;
+﻿using Application.Interfaces;
+using Application.Models;
+using Application.Models.Responses;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
@@ -10,38 +12,80 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class SaleOrderDetailService
+    public class SaleOrderDetailService : ISaleOrderDetailService
     {
-        private readonly ISaleOrderDetailRepository _saleOrderRepository;
+        private readonly ISaleOrderDetailRepository _saleOrderDetailRepository;
         private readonly IProductRepository _productRepository;
+        private readonly ISaleOrderRepository _saleOrderRepository;
 
-        public SaleOrderDetailService(ISaleOrderDetailRepository saleOrderRepository, IProductRepository productRepository)
+        public SaleOrderDetailService(ISaleOrderDetailRepository saleOrderDetailRepository, IProductRepository productRepository, ISaleOrderRepository saleOrderRepository)
         {
-            _saleOrderRepository = saleOrderRepository;
+            _saleOrderDetailRepository = saleOrderDetailRepository;
             _productRepository = productRepository;
+            _saleOrderRepository = saleOrderRepository;
         }
 
-        public List<SaleOrderDetail> GetAllBySaleOrder(int saleOrderId)
+        public List<SaleOrderDetailResponseDTO> GetAllBySaleOrder(int saleOrderId)
         {
-            return _saleOrderRepository.GetAllBySaleOrder(saleOrderId);
+            var saleOrder = _saleOrderRepository.Get(saleOrderId);
+            return saleOrder.SaleOrderDetails.Select(detail => new SaleOrderDetailResponseDTO
+            {
+                Id = detail.Id,
+                Amount = detail.Amount,
+                Product = new ProductResponseDTO
+                {
+                    Id = detail.Product.Id,
+                    Name = detail.Product.Name,
+                    Price = detail.Product.Price
+                }
+            }).ToList();
+
         }
 
-        public List<SaleOrderDetail> GetAllByProducts(int productId)
+        public List<SaleOrderDetailResponseDTO> GetAllByProducts(int productId)
         {
-            return _saleOrderRepository.GetAllByProduct(productId);
+           var product = _productRepository.Get(productId);
+           
+            var saleOrderDetails = _saleOrderDetailRepository.GetAllByProduct(productId);
+            return saleOrderDetails.Select(s => new SaleOrderDetailResponseDTO
+            {
+                Id = s.Id,
+                Amount = s.Amount,
+                Product = new ProductResponseDTO
+                {
+                    Id = s.Product.Id,
+                    Name = s.Product.Name,
+                    Price = s.Product.Price
+                }
+            }).ToList();
         }
 
-        public SaleOrderDetail? Get(int id)
+        public SaleOrderDetailResponseDTO? Get(int id)
         {
-            return _saleOrderRepository.Get(id);
+            var saleOrderDetail = _saleOrderDetailRepository.Get(id);
+            if(saleOrderDetail is null)
+            {
+                return null;
+            }
+            return new SaleOrderDetailResponseDTO
+            {
+                Id = saleOrderDetail.Id,
+                Amount = saleOrderDetail.Amount,
+                Product = new ProductResponseDTO
+                {
+                    Id = saleOrderDetail.Product.Id,
+                    Name = saleOrderDetail.Product.Name,
+                    Price = saleOrderDetail.Product.Price
+                }
+            };
         }
 
         public void Add(SaleOrderDetailCreateDTO dto)
         {
             var product = _productRepository.Get(dto.ProductId);
-            if (product == null)
+            if(product is null)
             {
-                throw new NotAllowedException("El producto no fue encontrado");
+                throw new NotAllowedException("No se encontro el producto");
             }
 
             var saleOrderDetail = new SaleOrderDetail()
@@ -49,22 +93,38 @@ namespace Application.Services
                 ProductId = dto.ProductId,
                 SaleOrderId = dto.SaleOrderId,
                 Amount = dto.Amount,
-                UnitPrice = product.Price,
+                UnitPrice = product.Price
             };
+
+            _saleOrderDetailRepository.Add(saleOrderDetail);
+
+            var saleOrder = _saleOrderRepository.Get(dto.SaleOrderId);
+            if(saleOrder is not null)
+            {
+                saleOrder.Total += saleOrderDetail.Amount * product.Price;
+                _saleOrderRepository.Update(saleOrder);
+            }
         }
 
         public void Delete(int id)
         {
-            var saleOrderDelete = _saleOrderRepository.Get(id);
-            if (saleOrderDelete != null)
+            var saleOrderDelete = _saleOrderDetailRepository.Get(id);
+            if (saleOrderDelete is not null)
             {
-                _saleOrderRepository.Delete(saleOrderDelete);
+                var saleOrder = _saleOrderRepository.Get(saleOrderDelete.SaleOrderId);
+                if(saleOrder is not null)
+                {
+                    saleOrder.Total -= saleOrderDelete.Amount * saleOrderDelete.UnitPrice;
+                    _saleOrderRepository.Update(saleOrder);
+                }
+
+                _saleOrderDetailRepository.Delete(saleOrderDelete);
             }
         }
 
         public void Update(int id, SaleOrderDetailUpdateDTO dto)
         {
-            var saleOrderDetailUpdate = _saleOrderRepository.Get(id);
+            var saleOrderDetailUpdate = _saleOrderDetailRepository.Get(id);
             if(saleOrderDetailUpdate == null)
             {
                 throw new NotAllowedException("No se encontro ningun detalle de venta");

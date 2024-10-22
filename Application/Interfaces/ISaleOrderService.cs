@@ -1,4 +1,5 @@
 ﻿using Application.Models;
+using Application.Models.Responses;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace Application.Interfaces
 {
     public interface ISaleOrderService
     {
-        List<SaleOrder> GetAllByClient(int clientId);
-        SaleOrder? Get(int id);
+        List<SaleOrderResponseDTO> GetAllByClient(int clientId);
+        SaleOrderResponseDTO? Get(int id);
         void Add(SaleOrderCreateDTO createSaleOrder);
         void Update(int id,SaleOrderUpdateDTO update);
         void Delete(int id);
