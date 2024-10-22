@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,5 +17,8 @@ namespace Domain.Entities
         public string Name { get; set; }
         public decimal Price { get; set; }
         public int Stock { get; set; }
+        public StockStatus StockStatus => Stock > 0 ? StockStatus.Disponible : StockStatus.Agotado;
+
+
     }
 }

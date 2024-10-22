@@ -80,5 +80,30 @@ namespace TPI_Ecommerce.Controllers
             }
             return Forbid();
         }
+
+        
+        [HttpGet("CheckStock")]
+        public IActionResult CheckStock([FromQuery] int productId)
+        {
+            if (IsUserInRol("Client") || IsUserInRol("Admin"))
+            {
+                var stockCheckResult = _service.CheckStock(productId);
+                var product = _service.Get(productId);
+
+                var message = "";
+                
+                if (stockCheckResult == 0)
+                {
+                   message = $"{product.Stock} unidades disponibles.";
+                }
+                else
+                {
+                    message = "Agotado";
+                }
+                return Ok(message);
+            }
+
+            return Forbid();
+        }
     }
 }
