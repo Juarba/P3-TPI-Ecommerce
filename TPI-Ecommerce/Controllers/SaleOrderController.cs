@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TPI_Ecommerce.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class SaleOrderController : ControllerBase
@@ -30,7 +30,7 @@ namespace TPI_Ecommerce.Controllers
 
         }
 
-        [HttpGet("by-client/{clientId}")]
+        [HttpGet("{clientId}")]
         public IActionResult GetAllByClient([FromRoute] int clientId)
         {
             var saleOrders = _service.GetAllByClient(clientId);
@@ -44,7 +44,7 @@ namespace TPI_Ecommerce.Controllers
             return Ok("Creada la venta para el cliente");
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             if (_service.Get(id) is null)
@@ -54,7 +54,7 @@ namespace TPI_Ecommerce.Controllers
             return Ok("Orden eliminada exitosamente");
         }
 
-        [HttpPut("Update/{id}")]
+        [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] SaleOrderUpdateDTO saleOrderUpdate)
         {
             try

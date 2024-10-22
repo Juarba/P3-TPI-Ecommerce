@@ -82,7 +82,7 @@ builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ISaleOrderService,SaleOrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ISaleOrderDetailRepository,SaleOrderDetailRepository>();
+builder.Services.AddScoped<ISaleOrderDetailService,SaleOrderDetailService>();
 builder.Services.Configure<AuthenticateServiceOptions>(
     builder.Configuration.GetSection(AuthenticateServiceOptions.AuthenticateService));
 builder.Services.AddScoped<ICustomAuthenticationService, AuthenticateService>();

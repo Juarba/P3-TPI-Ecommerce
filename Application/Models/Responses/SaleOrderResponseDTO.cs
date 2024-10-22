@@ -11,8 +11,8 @@ namespace Application.Models.Responses
     {
         public int Id { get; set; }
         public decimal Total { get; set; }
-        public string PaymentMethod { get; set; }
-        public ClientResponseDTO Client { get; set; }
-        public List<SaleOrderDetail> SaleOrderDetails { get; set; }
+        public string? PaymentMethod { get; set; }
+        public ClientResponseDTO? Client { get; set; }
+        public List<SaleOrderDetailResponseDTO>? SaleOrderDetails { get; set; } 
     }
 }

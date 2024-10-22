@@ -37,7 +37,7 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<SaleOrderDetail>()
                 .HasOne(p => p.Product)
-                .WithOne();
+                .WithMany();
 
             base.OnModelCreating(modelBuilder);
         }

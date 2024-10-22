@@ -11,5 +11,6 @@ namespace Domain.Interfaces
     {
         List<SaleOrderDetail> GetAllBySaleOrder(int saleOrderId);
         List<SaleOrderDetail> GetAllByProduct(int productId);
+        SaleOrderDetail? Get(int id);
     }
 }

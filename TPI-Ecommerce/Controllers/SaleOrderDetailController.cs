@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TPI_Ecommerce.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class SaleOrderDetailController : ControllerBase
     {
@@ -24,44 +24,61 @@ namespace TPI_Ecommerce.Controllers
             _productService = productService;
         }
 
-        [HttpGet("saleOrder/{saleOrderId}")]
-        public ActionResult<List<SaleOrderDetail>> GetAllBySaleOrder(int saleOrderId)
+        [HttpGet("{saleOrderId}")]
+        public IActionResult GetAllBySaleOrder(int saleOrderId)
         {
-            var details = _saleOrderDetailService.GetAllBySaleOrder(saleOrderId);
-            if (details == null || details.Count == 0)
+            var saleOrder = _saleOrderService.Get(saleOrderId);
+            if(saleOrder is null)
             {
-                return NotFound("No se encontraron detalles para la orden de venta especificada.");
+                return NotFound($"No se encontro ninguna venta con el ID: {saleOrderId}");
             }
-            return Ok(details);
+
+            var saleOrderDetails = _saleOrderDetailService.GetAllBySaleOrder(saleOrderId);
+            return Ok(saleOrderDetails);
+
         }
 
-        [HttpGet("product/{productId}")]
-        public ActionResult<List<SaleOrderDetail>> GetAllByProduct(int productId)
+        [HttpGet("{productId}")]
+        public IActionResult GetAllByProduct(int productId)
         {
-            var details = _saleOrderDetailService.GetAllByProducts(productId);
-            if (details == null || details.Count == 0)
+            var product = _productService.Get(productId);
+            if(product is null)
             {
-                return NotFound("No se encontraron detalles para el producto especificado.");
+                return NotFound($"No se encontro el producto con el ID: {productId}");
             }
-            return Ok(details);
+
+            var saleOrderDetails = _saleOrderDetailService.GetAllByProducts(productId);
+            return Ok(saleOrderDetails);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<SaleOrderDetail> Get(int id)
+        public IActionResult GetById(int id)
         {
-            var detail = _saleOrderDetailService.Get(id);
-            if (detail == null)
+            var saleOrderDetail = _saleOrderDetailService.Get(id);
+            if(saleOrderDetail is null)
             {
-                return NotFound("No se encontró el detalle de la orden de venta.");
+                return NotFound($"No se encontro la linea de venta con el ID: {id}");
             }
-            return Ok(detail);
+            return Ok(saleOrderDetail);
         }
 
         [HttpPost]
-        public ActionResult Add([FromBody] SaleOrderDetailCreateDTO dto)
+        public IActionResult Add([FromBody] SaleOrderDetailCreateDTO dto)
         {
+            var actualSaleOrder = _saleOrderService.Get(dto.SaleOrderId);
+            if(actualSaleOrder is null)
+            {
+                return NotFound($"No se encontro la venta con el ID {dto.SaleOrderId}");
+            }
+
+            var productSelected = _productService.Get(dto.ProductId);
+            if(productSelected is null)
+            {
+                return NotFound($"No se encontro el producto con el ID {dto.ProductId}");
+            }
+
             _saleOrderDetailService.Add(dto);
-            return CreatedAtAction(nameof(Get), new { id = dto.SaleOrderId }, dto);
+            return Ok("La linea de venta fue agregada");        
         }
 
         [HttpPut("{id}")]

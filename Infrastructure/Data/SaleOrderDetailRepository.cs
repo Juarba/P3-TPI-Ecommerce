@@ -34,8 +34,15 @@ namespace Infrastructure.Data
                 .Include(p => p.Product)
                 .Include(s => s.SaleOrder)
                 .ThenInclude(c => c.Client)
-                .Where(x => x.Id == productId)
+                .Where(x => x.Product.Id == productId)
                 .ToList();
+        }
+
+        public SaleOrderDetail? Get(int id)
+        {
+            return _context.SaleOrderDetails
+                .Include(p => p.Product)
+                .FirstOrDefault(x => x.Id == id);
         }
     }
 
