@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Application.Models;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -62,9 +63,13 @@ namespace TPI_Ecommerce.Controllers
                 _service.Update(id, saleOrderUpdate);
                 return Ok("Orden modificada exitosamente");
             }
-            catch
+            catch(NotAllowedException e)
             {
-                return NotFound("Objeto no encontrado");
+                return BadRequest("Objeto no encontrado");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Ocurrio un error inesperado: " +e.Message);
             }
         }
     }

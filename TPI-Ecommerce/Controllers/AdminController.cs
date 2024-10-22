@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -52,8 +53,20 @@ namespace TPI_Ecommerce.Controllers
         {
             if(IsUserInRol("Admin"))
             {
-                _service.Update(id, adminUpdate);
-                return Ok("Admin modified succesfully");
+                try
+                {
+                    _service.Update(id, adminUpdate);
+                    return Ok("Admin modified succesfully");
+                }
+                catch(NotAllowedException e)
+                {
+                    return BadRequest("Error, Admin no encontrado");
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(500, "An Unexpected Error: " +e.Message);
+                }
+                
             }
             return Forbid();
         }

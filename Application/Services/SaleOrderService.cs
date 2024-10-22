@@ -2,6 +2,7 @@
 using Application.Models;
 using Application.Models.Responses;
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -99,18 +100,18 @@ namespace Application.Services
         {
             var product = _repository.Get(id);
             if (product is null)
-                throw new Exception();
+                throw new NotAllowedException();
 
             if(update.Shipment is not null)
                 product.Shipment=(bool)update.Shipment;
 
             if(update.PaymentMethod != string.Empty)
                 product.PaymentMethod=update.PaymentMethod;
-                _repository.Update(product);
+                
 
             if(update.client is not null)
                 product.Client=(Client)update.client;
-            
+            _repository.Update(product);
         }
 
         public void Delete(int id) 
