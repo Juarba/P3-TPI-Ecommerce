@@ -16,9 +16,9 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public List<Client> GetClientByName(string name)
+        public Client? GetClientByName(string name)
         {
-            return _context.Clients.Where(x => x.Name == name).ToList();
+            return _context.Clients.FirstOrDefault(x => x.Name == name);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace TPI_Ecommerce.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ClientController : ControllerBase
     {
@@ -43,9 +43,9 @@ namespace TPI_Ecommerce.Controllers
            if(IsUserInRol("Admin"))
             {
                 var client = _service.Get(id);
-                if (client == null)
+                if (client is null)
                 {
-                    NotFound("No se encontro el cliente");
+                   return NotFound($"No se encontró el cliente con el ID: {id}");
                 }
 
                 return Ok(client);
@@ -54,28 +54,43 @@ namespace TPI_Ecommerce.Controllers
             return Forbid();
         }
 
+        [HttpGet("{name}")]
+        [Authorize]
+        public IActionResult GetByName(string name)
+        {
+            if(IsUserInRol("Admin"))
+            {
+                var client = _service.GetByName(name);
+                if(client is null)
+                {
+                   return NotFound($"No se encontró el cliente con el nombre: {name}");
+                }
+                return Ok(client);
+            }
+            return Forbid();
+        }
 
         [HttpPost]
         public IActionResult AddClient([FromBody] ClientCreateDto client)
         {
             _service.Add(client);
-            return Ok("Client added succesfully");
+            return Ok("El Client fue agregado exitósamente");
         }
 
         [HttpPut("{id}")]
         [Authorize]
         public IActionResult UpdateClient([FromRoute] int id, [FromBody] ClientUpdateDto dto)
-        {
-            var userUpdate = _service.Get(id);
-            if(userUpdate == null)
-            {
-                return NotFound($"No se encontro el cliente con el ID: {id}");
-            }
-
+        {         
             if(IsUserInRol("Admin"))
             {
-                _service.Update(id, dto);
-                return Ok("El cliente fue actualizado correctamente");
+               var userUpdate = _service.Get(id);
+               if (userUpdate is null)
+               {
+                    return NotFound($"No se encontró el cliente con el ID: {id}");
+               }
+
+               _service.Update(id, dto);
+               return Ok($"El cliente con ID: {id} fue actualizado correctamente");
             }
             return Forbid();
         }
@@ -90,11 +105,11 @@ namespace TPI_Ecommerce.Controllers
                 var client = _service.Get(id);
                 if (client == null)
                 {
-                    return NotFound("No se encontro el cliente");
+                    return NotFound($"No se encontró el cliente con el ID: {id}");
                 }
 
                 _service.Delete(id);
-                return Ok("El cliente fue eliminado");
+                return Ok($"El cliente con ID: {id} fue eliminado");
             }
             return Forbid();
         }

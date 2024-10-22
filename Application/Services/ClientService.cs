@@ -30,7 +30,7 @@ namespace Application.Services
             return _repository.Get(id);
         }
 
-        public List<Client> GetByName(string name) 
+        public Client? GetByName(string name) 
         {
             return _repository.GetClientByName(name);
         }
@@ -70,9 +70,5 @@ namespace Application.Services
             }
 
         }
-
-
-
-
     }
 }

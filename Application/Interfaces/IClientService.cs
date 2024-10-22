@@ -12,7 +12,7 @@ namespace Application.Interfaces
     {
         List<Client> GetAll();
         Client? Get(int id);
-        List<Client> GetByName(string name);
+        Client? GetByName(string name);
         void Add(ClientCreateDto clientDto);
         void Update(int id, ClientUpdateDto dto);
         void Delete(int id);

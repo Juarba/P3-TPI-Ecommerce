@@ -9,6 +9,6 @@ namespace Domain.Interfaces
 {
     public interface IClientRepository : IBaseRepository<Client>
     {
-        List<Client> GetClientByName(string name);
+        Client? GetClientByName(string name);
     }
 }
