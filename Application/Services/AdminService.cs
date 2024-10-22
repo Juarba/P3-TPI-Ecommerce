@@ -49,7 +49,7 @@ namespace Application.Services
         public void Delete(int id)
         {
             var adminToDelete = _repository.Get(id);
-            if (adminToDelete != null)
+            if (adminToDelete is not null)
             {
                 _repository.Delete(adminToDelete);
             }

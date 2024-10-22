@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace TPI_Ecommerce.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class ProductController : ControllerBase
@@ -36,42 +36,53 @@ namespace TPI_Ecommerce.Controllers
             return Forbid();
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var product = _service.Get(id);
+            if(product is null)
+            {
+                return NotFound($"No se encontró el producto con ID: {id}");
+            }
+            return Ok(product);
+        }
+
         [HttpPost]
         public IActionResult AddProduct([FromBody] ProductCreateDto product)
         {
            if(IsUserInRol("Admin"))
             {
                 _service.Add(product);
-                return Ok("Product added succesfully");
+                return Ok("Producto agregado exitósamente");
             }
             return Forbid();
         }
 
-        [HttpPut("Update/{id}")]
+        [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] ProductUpdateDto productUpdate)
         {
-            var product = _service.Get(id);
-            if(product is null)
-            {
-                return NotFound($"No se encontro el producto con el ID: {id}");
-            }
-
             if (IsUserInRol("Admin"))
             {
+                var product = _service.Get(id);
+                if (product is null)
+                {
+                    return NotFound($"No se encontró el producto con el ID: {id}");
+                }
+
                 _service.Update(id, productUpdate);
-                return Ok("Product modified succesfully");
+                return Ok($"Producto con ID: {id} modificado exitósamente");
             }
             return Forbid();
         }
         
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
             if (IsUserInRol("Admin"))
             {
                 var existingProduct = _service.Get(id);
-                if (existingProduct == null)
+                if (existingProduct is null)
                 {
                     return NotFound($"No se encontró ningún Producto con el ID: {id}");
                 }

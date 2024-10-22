@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace TPI_Ecommerce.Controllers
 { 
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class AdminController : ControllerBase
@@ -27,7 +27,7 @@ namespace TPI_Ecommerce.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             if(IsUserInRol("Admin"))
             {
@@ -37,13 +37,29 @@ namespace TPI_Ecommerce.Controllers
             return Forbid();
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            if(IsUserInRol("Admin"))
+            {
+                var admin = _service.Get(id);
+                if (admin is null)
+                {
+                    return NotFound($"No se encontró ningún Admin con el ID: {id}");
+                }
+
+                return Ok(admin);
+            }
+            return Forbid();     
+        }
+
         [HttpPost]
-        public IActionResult Add([FromBody] AdminCreateDto admin)
+        public IActionResult AddAdmin([FromBody] AdminCreateDto admin)
         {
             if(IsUserInRol("Admin"))
             {
                 _service.Add(admin);
-                return Ok("Admin added succesfully");
+                return Ok("El Admin fue creado exitósamente");
             }
             return Forbid();
         }
@@ -51,33 +67,33 @@ namespace TPI_Ecommerce.Controllers
         [HttpPut("Update/{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] AdminUpdateDto adminUpdate)
         {
-            if(IsUserInRol("Admin"))
+            if (IsUserInRol("Admin"))
             {
                 try
                 {
                     _service.Update(id, adminUpdate);
                     return Ok("Admin modified succesfully");
                 }
-                catch(NotAllowedException e)
+                catch (NotAllowedException e)
                 {
                     return BadRequest("Error, Admin no encontrado");
                 }
                 catch (Exception e)
                 {
-                    return StatusCode(500, "An Unexpected Error: " +e.Message);
+                    return StatusCode(500, "An Unexpected Error: " + e.Message);
                 }
-                
+
             }
             return Forbid();
         }
 
-        [HttpDelete("Delete/{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteAdmin([FromRoute] int id)
         {
             if(IsUserInRol("Admin"))
             {
                 var existingAdmin = _service.Get(id);
-                if (existingAdmin == null)
+                if (existingAdmin is null)
                 {
                     return NotFound($"No se encontró ningún Admin con el ID: {id}");
                 }
