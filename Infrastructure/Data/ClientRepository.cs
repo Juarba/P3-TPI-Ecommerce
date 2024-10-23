@@ -1,5 +1,7 @@
-﻿using Domain.Entities;
+﻿using Application.Models.Responses;
+using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,13 @@ namespace Infrastructure.Data
         public Client? GetClientByName(string name)
         {
             return _context.Clients.FirstOrDefault(x => x.Name == name);
+        }
+
+        public List<Client> GetAll()
+        {
+            return _context.Clients
+                .Include(c => c.SaleOrders) 
+                .ToList();
         }
     }
 }
