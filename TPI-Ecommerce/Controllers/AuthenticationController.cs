@@ -24,7 +24,7 @@ public class AuthenticateController : ControllerBase
             string token = _customAuthenticationService.Authenticate(credentials); // Llamar a una función que valide los parámetros que enviamos.
             return Ok(token);
         }
-        catch (NotAllowedException)
+        catch (NotFoundException)
         {
             return Unauthorized(new { message = "Credenciales inválidas. Por favor, verifica tu email y contraseña." });
         }

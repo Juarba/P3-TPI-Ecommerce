@@ -100,26 +100,21 @@ namespace Application.Services
         {
             var product = _repository.Get(id);
             if (product is null)
-                throw new NotAllowedException();
+                throw new NotFoundException();
 
-            if(update.Shipment is not null)
-                product.Shipment=(bool)update.Shipment;
 
             if(update.PaymentMethod != string.Empty)
                 product.PaymentMethod=update.PaymentMethod;
                 
-
-            if(update.client is not null)
-                product.Client=(Client)update.client;
             _repository.Update(product);
         }
 
         public void Delete(int id) 
         {
-            var product = _repository.Get(id);
-            if(product is not null) 
+            var saleOrder = _repository.Get(id);
+            if(saleOrder is not null) 
             {
-                _repository.Delete(product);
+                _repository.Delete(saleOrder);
             }
         }
 

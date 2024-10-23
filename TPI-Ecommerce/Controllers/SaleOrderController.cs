@@ -23,47 +23,51 @@ namespace TPI_Ecommerce.Controllers
         public IActionResult GetById([FromRoute] int id)
         {
             var saleOrder = _service.Get(id);
-            if (saleOrder == null)
+            if (saleOrder is null)
             {
-                return NotFound();
+                return NotFound($"No se encontró la venta con ID: {id}");
             }
             return Ok(saleOrder);
-
         }
 
         [HttpGet("{clientId}")]
         public IActionResult GetAllByClient([FromRoute] int clientId)
         {
             var saleOrders = _service.GetAllByClient(clientId);
+            if (saleOrders.Count == 0 )
+            {
+                return NotFound($"No se encontró al cliente con ID: {clientId}");
+            }
             return Ok(saleOrders);
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] SaleOrderCreateDTO saleOrderCreate)
+        public IActionResult AddSaleOrder([FromBody] SaleOrderCreateDTO saleOrderCreate)
         {
             _service.Add(saleOrderCreate);
             return Ok("Creada la venta para el cliente");
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteSaleOrder(int id)
         {
-            if (_service.Get(id) is null)
-                return NotFound("No se encontro la Orden");
+            var saleOrder = _service.Get(id);
+            if (saleOrder is null)
+                return NotFound($"No se encontró la venta con ID: {id}");
 
             _service.Delete(id);
-            return Ok("Orden eliminada exitosamente");
+            return Ok("Venta eliminada exitósamente");
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] SaleOrderUpdateDTO saleOrderUpdate)
+        public IActionResult UpdateSaleOrder([FromRoute] int id, [FromBody] SaleOrderUpdateDTO saleOrderUpdate)
         {
             try
             {
                 _service.Update(id, saleOrderUpdate);
                 return Ok("Orden modificada exitosamente");
             }
-            catch(NotAllowedException e)
+            catch(NotFoundException e)
             {
                 return BadRequest("Objeto no encontrado");
             }

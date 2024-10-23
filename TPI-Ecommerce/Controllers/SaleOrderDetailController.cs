@@ -63,7 +63,7 @@ namespace TPI_Ecommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] SaleOrderDetailCreateDTO dto)
+        public IActionResult AddSaleOrderDetail([FromBody] SaleOrderDetailCreateDTO dto)
         {
             var actualSaleOrder = _saleOrderService.Get(dto.SaleOrderId);
             if(actualSaleOrder is null)
@@ -78,7 +78,12 @@ namespace TPI_Ecommerce.Controllers
             }
 
             if (productSelected.Stock < dto.Amount)
-                return NotFound("Stock Insuficiente");
+                return BadRequest("Stock Insuficiente");
+
+            if(dto.Amount <= 0)
+            {
+                return BadRequest("La cantidad debe ser mayor que 0");
+            }
 
             _productService.Update(productSelected.Id, new ProductUpdateDto()
             {
@@ -93,14 +98,14 @@ namespace TPI_Ecommerce.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update(int id, [FromBody] SaleOrderDetailUpdateDTO dto)
+        public ActionResult UpdateSaleOrderDetail(int id, [FromBody] SaleOrderDetailUpdateDTO dto)
         {
             try
             {
                 _saleOrderDetailService.Update(id, dto);
                 return NoContent();
             }
-            catch (NotAllowedException e)
+            catch (NotFoundException e)
             {
                 return BadRequest(e.Message);
             }
@@ -111,10 +116,16 @@ namespace TPI_Ecommerce.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult DeleteSaleOrderDetail(int id)
         {
+            var saleOrderDetail = _saleOrderDetailService.Get(id);
+            if(saleOrderDetail is null)
+            {
+                return NotFound($"No se encontró la la linea de venta con el ID: {id}");
+            }
+
             _saleOrderDetailService.Delete(id);
-            return NoContent();
+            return Ok($"La linea de venta con ID {id} fue eliminada");
         }
     }
 }

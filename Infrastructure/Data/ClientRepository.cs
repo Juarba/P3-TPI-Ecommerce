@@ -16,6 +16,7 @@ namespace Infrastructure.Data
             _context = context;
         }
 
+
         public Client? GetClientByName(string name)
         {
             return _context.Clients.FirstOrDefault(x => x.Name == name);

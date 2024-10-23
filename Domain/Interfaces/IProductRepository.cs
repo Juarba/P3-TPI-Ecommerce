@@ -10,10 +10,6 @@ namespace Domain.Interfaces
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
-        Product? Get(string name);
-
-        List<Product> GetProductByName(string name);
-
         StockStatus CheckStock(int productId);
     }
 }

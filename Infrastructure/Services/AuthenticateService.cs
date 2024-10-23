@@ -49,7 +49,7 @@ namespace Infrastructure.Services
 
             if (user == null)
             {
-                throw new NotAllowedException("User authentication failed");
+                throw new NotFoundException("User authentication failed");
             }
 
 

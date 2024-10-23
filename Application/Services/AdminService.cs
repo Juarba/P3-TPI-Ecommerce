@@ -60,7 +60,7 @@ namespace Application.Services
             var adminToUpdate = _repository.Get(id);
 
             if (adminToUpdate is null)
-                throw new NotAllowedException();
+                throw new NotFoundException();
 
             if (adminToUpdate is not null)
             {

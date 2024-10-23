@@ -64,8 +64,8 @@ namespace TPI_Ecommerce.Controllers
             return Forbid();
         }
 
-        [HttpPut("Update/{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] AdminUpdateDto adminUpdate)
+        [HttpPut("{id}")]
+        public IActionResult UpdateAdmin([FromRoute] int id, [FromBody] AdminUpdateDto adminUpdate)
         {
             if (IsUserInRol("Admin"))
             {
@@ -74,7 +74,7 @@ namespace TPI_Ecommerce.Controllers
                     _service.Update(id, adminUpdate);
                     return Ok("Admin modificado exitosamente");
                 }
-                catch (NotAllowedException e)
+                catch (NotFoundException e)
                 {
                     return BadRequest("Error, Admin no Encontrado");
                 }

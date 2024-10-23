@@ -124,12 +124,12 @@ namespace Application.Services
             var saleOrderDetailUpdate = _saleOrderDetailRepository.Get(id);
             if(saleOrderDetailUpdate == null)
             {
-                throw new NotAllowedException("No se encontro ningun detalle de venta");
+                throw new NotFoundException("No se encontro ningun detalle de venta");
             }
             var product = _productRepository.Get(dto.ProductId);
             if(product == null)
             {
-                throw new NotAllowedException("No se encontro ningun producto");
+                throw new NotFoundException("No se encontro ningun producto");
             }
 
             saleOrderDetailUpdate.ProductId = dto.ProductId;
