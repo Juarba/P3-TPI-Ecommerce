@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.Models.Responses;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;
@@ -20,9 +21,18 @@ namespace Application.Services
             _repository = repository;
         }
 
-        public List<Client> GetAll()
+        public List<ClientDetailResponseDTO> GetAll()
         {
-            return _repository.Get();
+            var clients = _repository.GetAll();
+            return clients.Select(c => new ClientDetailResponseDTO
+            {
+                Id = c.Id,
+                Name = c.Name,
+                LastName = c.LastName,
+                Email = c.Email,
+                UserRol = c.UserRol,
+                SaleOrderCount = c.SaleOrders.Count 
+            }).ToList();
         }
 
         public Client? Get(int id)

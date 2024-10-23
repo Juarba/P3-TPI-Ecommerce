@@ -1,4 +1,5 @@
 ﻿using Application.Models;
+using Application.Models.Responses;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Application.Interfaces
 {
     public interface IClientService
     {
-        List<Client> GetAll();
+        List<ClientDetailResponseDTO> GetAll();
         Client? Get(int id);
         Client? GetByName(string name);
         void Add(ClientCreateDto clientDto);

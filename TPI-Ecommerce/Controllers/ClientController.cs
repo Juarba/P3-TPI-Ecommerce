@@ -23,16 +23,25 @@ namespace TPI_Ecommerce.Controllers
             return claimsRol is not null && claimsRol.Value == rol;
         }
 
+        private int? GetUserId() //Funcion para obtener el userId de las claims del usuario autenticado en el contexto de la solicitud actual.
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var userId))
+            {
+                return userId;
+            }
+            return null;
+        }
+
         [HttpGet]
         [Authorize]
         public IActionResult GetAll()
         {
-            if(IsUserInRol("Admin"))
+            if (IsUserInRol("Admin"))
             {
                 return Ok(_service.GetAll());
             }
             return Forbid();
-          
         }
 
         [HttpGet("{id}")]
@@ -80,16 +89,23 @@ namespace TPI_Ecommerce.Controllers
         [HttpPut("{id}")]
         [Authorize]
         public IActionResult UpdateClient([FromRoute] int id, [FromBody] ClientUpdateDto dto)
-        {         
-            if(IsUserInRol("Admin"))
+        {
+            var userId = GetUserId();
+            if (userId == null)
             {
-               var userUpdate = _service.Get(id);
-               if (userUpdate is null)
-               {
-                    return NotFound($"No se encontró el cliente con el ID: {id}");
-               }
+                return Forbid();
+            }
 
-               _service.Update(id, dto);
+            
+            var userUpdate = _service.Get(id);
+            if (userUpdate is null)
+            {
+               return NotFound($"No se encontró el cliente con el ID: {id}");
+            }
+            
+            if (IsUserInRol("Admin") || (IsUserInRol("Client") && userId == id))
+            {
+                _service.Update(id, dto);
                return Ok($"El cliente con ID: {id} fue actualizado correctamente");
             }
             return Forbid();
@@ -100,14 +116,20 @@ namespace TPI_Ecommerce.Controllers
         [Authorize]
         public IActionResult DeleteClient(int id)
         {
-           if(IsUserInRol("Admin"))
+            var userId = GetUserId();
+            if (userId == null)
             {
-                var client = _service.Get(id);
-                if (client == null)
-                {
-                    return NotFound($"No se encontró el cliente con el ID: {id}");
-                }
+                return Forbid();
+            }
 
+            var client = _service.Get(id);
+            if (client == null)
+            {
+                return NotFound($"No se encontró el cliente con el ID: {id}");
+            }
+            
+            if (IsUserInRol("Admin") || (IsUserInRol("Client") && userId == id))
+            {
                 _service.Delete(id);
                 return Ok($"El cliente con ID: {id} fue eliminado");
             }
