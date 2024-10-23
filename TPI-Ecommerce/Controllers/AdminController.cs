@@ -72,15 +72,15 @@ namespace TPI_Ecommerce.Controllers
                 try
                 {
                     _service.Update(id, adminUpdate);
-                    return Ok("Admin modified succesfully");
+                    return Ok("Admin modificado exitosamente");
                 }
                 catch (NotAllowedException e)
                 {
-                    return BadRequest("Error, Admin no encontrado");
+                    return BadRequest("Error, Admin no Encontrado");
                 }
                 catch (Exception e)
                 {
-                    return StatusCode(500, "An Unexpected Error: " + e.Message);
+                    return StatusCode(500, "Ha ocurrido un Error inesperado: " + e.Message);
                 }
 
             }
