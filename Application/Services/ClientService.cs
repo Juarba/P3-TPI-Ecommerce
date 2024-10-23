@@ -42,7 +42,7 @@ namespace Application.Services
                 LastName = clientDto.LastName,
                 Email = clientDto.Email,
                 Password = clientDto.Password,
-                UserRol = clientDto.UserRole,
+                UserRol = "Client",
             };
 
             _repository.Add(client);

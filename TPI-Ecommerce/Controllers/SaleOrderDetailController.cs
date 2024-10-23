@@ -76,7 +76,16 @@ namespace TPI_Ecommerce.Controllers
             {
                 return NotFound($"No se encontro el producto con el ID {dto.ProductId}");
             }
-            
+
+            if (productSelected.Stock < dto.Amount)
+                return NotFound("Stock Insuficiente");
+
+            _productService.Update(productSelected.Id, new ProductUpdateDto()
+            {
+                Price=productSelected.Price,
+                Stock=productSelected.Stock - dto.Amount,
+            });
+
             _saleOrderDetailService.Add(dto);
             
             
@@ -97,7 +106,7 @@ namespace TPI_Ecommerce.Controllers
             }
             catch(Exception e)
             {
-                return StatusCode(500,"Ocurrio un error inesperado");
+                return StatusCode(500,"Ocurrio un error inesperado: "+e.Message);
             }
         }
 
