@@ -18,6 +18,6 @@ namespace Domain.Entities
         public string Name { get; set; }
         public decimal Price { get; set; }
         public int Stock { get; set; }
-        public StockStatus StockStatus => Stock > 0 ? StockStatus.Disponible : StockStatus.Agotado;
+        public string StockStatus => Stock > 0 ? "Disponible" : "Agotado";
     }
 }

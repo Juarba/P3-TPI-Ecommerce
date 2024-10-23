@@ -44,6 +44,7 @@ namespace TPI_Ecommerce.Controllers
             {
                 return NotFound($"No se encontró el producto con ID: {id}");
             }
+            
             return Ok(product);
         }
 
