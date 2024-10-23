@@ -18,16 +18,6 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public Product? Get(string name)
-        {
-            return _context.Products.FirstOrDefault(p => p.Name == name);
-        }
-
-        public List<Product> GetProductByName(string name)
-        {
-            return _context.Products.Where(x => x.Name == name).ToList();
-        }
-
         public StockStatus CheckStock(int productId)
         {
             var product = _context.Products.FirstOrDefault(p => p.Id == productId);

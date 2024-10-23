@@ -31,10 +31,6 @@ namespace Application.Services
             return _repository.Get(id);
         }
 
-        public List<Product> GetByName(string name)
-        {
-            return _repository.GetProductByName(name);
-        }
         public void Add(ProductCreateDto productDto)
         {
             var product = new Product()

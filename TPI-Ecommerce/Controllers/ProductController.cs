@@ -27,7 +27,7 @@ namespace TPI_Ecommerce.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             if(IsUserInRol("Client") || IsUserInRol("Admin"))
             {
@@ -59,7 +59,7 @@ namespace TPI_Ecommerce.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] ProductUpdateDto productUpdate)
+        public IActionResult UpdateProduct([FromRoute] int id, [FromBody] ProductUpdateDto productUpdate)
         {
             if (IsUserInRol("Admin"))
             {
@@ -77,7 +77,7 @@ namespace TPI_Ecommerce.Controllers
         
 
         [HttpDelete("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        public IActionResult DeleteProduct([FromRoute] int id)
         {
             if (IsUserInRol("Admin"))
             {

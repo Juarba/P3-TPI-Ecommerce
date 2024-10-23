@@ -14,17 +14,10 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public decimal Total { get; set; }
-        public bool Shipment { get; set; }
         public string PaymentMethod { get; set; }
         public int ClientId { get; set; }
         public Client Client { get; set; }
         public ICollection<SaleOrderDetail> SaleOrderDetails { get; set; } = new List<SaleOrderDetail>();
-
-        public void CalculateTotal()
-        {
-            Total = SaleOrderDetails.Sum(s => s.Amount * s.UnitPrice);
-        }
-
 
     }
 }
