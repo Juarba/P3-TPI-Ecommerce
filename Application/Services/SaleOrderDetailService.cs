@@ -134,7 +134,9 @@ namespace Application.Services
 
             saleOrderDetailUpdate.ProductId = dto.ProductId;
             saleOrderDetailUpdate.Amount = dto.Amount;
-           
+
+            _saleOrderDetailRepository.Update(saleOrderDetailUpdate);
+
         }
     }
 }
