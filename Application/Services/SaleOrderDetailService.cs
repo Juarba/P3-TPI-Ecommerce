@@ -119,24 +119,37 @@ namespace Application.Services
             }
         }
 
-        public void Update(int id, SaleOrderDetailUpdateDTO dto)
+        public void Update(int id, SaleOrderDetailUpdateDTO dto, int saleOrderId)
         {
             var saleOrderDetailUpdate = _saleOrderDetailRepository.Get(id);
             if(saleOrderDetailUpdate == null)
             {
-                throw new NotFoundException("No se encontro ningun detalle de venta");
+                throw new NotFoundException("No se encontró ninguna línea de venta");
             }
             var product = _productRepository.Get(dto.ProductId);
             if(product == null)
             {
-                throw new NotFoundException("No se encontro ningun producto");
+                throw new NotFoundException("No se encontró ningun producto");
             }
+
+            var previousSubtotal = saleOrderDetailUpdate.Amount * saleOrderDetailUpdate.UnitPrice;
 
             saleOrderDetailUpdate.ProductId = dto.ProductId;
             saleOrderDetailUpdate.Amount = dto.Amount;
+            saleOrderDetailUpdate.UnitPrice = product.Price;
 
-            _saleOrderDetailRepository.Update(saleOrderDetailUpdate);
+            var saleOrder = _saleOrderRepository.Get(saleOrderId);
+            if(saleOrder == null)
+            {
+                throw new NotFoundException("No se encontró ninguna venta con ese ID");
+            }
 
+            var newSubtotal = saleOrderDetailUpdate.Amount * saleOrderDetailUpdate.UnitPrice;
+
+            saleOrder.Total = saleOrder.Total - previousSubtotal + newSubtotal;
+
+            _saleOrderRepository.Update(saleOrder);
+            _saleOrderDetailRepository.Update(saleOrderDetailUpdate);           
         }
     }
 }

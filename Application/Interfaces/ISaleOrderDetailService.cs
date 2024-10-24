@@ -16,7 +16,7 @@ namespace Application.Interfaces
         SaleOrderDetailResponseDTO? Get(int id);
         void Add(SaleOrderDetailCreateDTO dto);
         void Delete(int id);
-        void Update(int id, SaleOrderDetailUpdateDTO dto);
+        void Update(int id, SaleOrderDetailUpdateDTO dto, int saleOrderId);
 
 
     }

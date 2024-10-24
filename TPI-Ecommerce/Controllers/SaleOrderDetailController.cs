@@ -152,7 +152,7 @@ namespace TPI_Ecommerce.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateSaleOrderDetail(int id, [FromBody] SaleOrderDetailUpdateDTO dto)
+        public IActionResult UpdateSaleOrderDetail(int id, [FromBody] SaleOrderDetailUpdateDTO dto, int saleOrderId)
         {
             var userId = GetUserId();
             if (userId == null)
@@ -160,40 +160,68 @@ namespace TPI_Ecommerce.Controllers
                 return Forbid();
             }
 
-
-            var productSelected = _productService.Get(dto.ProductId);
-            if (productSelected is null)
+            try
             {
-                return NotFound($"No se encontro el producto con el ID {dto.ProductId}");
-            }
-
-            if (productSelected.Stock < dto.Amount)
-                return BadRequest("Stock Insuficiente");
-
-            if (dto.Amount <= 0)
-            {
-                return BadRequest("La cantidad debe ser mayor que 0");
-            }
-
-            if (IsUserInRol("Admin") || IsUserInRol("Client"))
-            {
-                _productService.Update(productSelected.Id, new ProductUpdateDto()
+                var productSelected = _productService.Get(dto.ProductId);
+                if (productSelected is null)
                 {
-                    Price = productSelected.Price,
-                    Stock = productSelected.Stock - dto.Amount,
-                });
+                    return NotFound($"No se encontró el producto con el ID {dto.ProductId}");
+                }
 
-                _saleOrderDetailService.Update(id, dto);
-                return Ok("La línea de venta fue modificada");
+                var actualSaleOrder = _saleOrderService.Get(saleOrderId);
+                if (actualSaleOrder is null)
+                {
+                    return NotFound($"No se encontró la venta con ID: {saleOrderId}");
+                }
+
+                if (productSelected.Stock < dto.Amount)
+                    return BadRequest("Stock Insuficiente");
+
+                if (dto.Amount <= 0)
+                {
+                    return BadRequest("La cantidad debe ser mayor que 0");
+                }
+
+                if (IsUserInRol("Admin") || IsUserInRol("Client") && userId == actualSaleOrder.Client.Id)
+                {
+                    _productService.Update(productSelected.Id, new ProductUpdateDto()
+                    {
+                        Price = productSelected.Price,
+                        Stock = productSelected.Stock - dto.Amount,
+                    });
+
+                    _saleOrderDetailService.Update(id, dto, saleOrderId);
+                    return Ok("La línea de venta fue modificada");
+                }
+                return Forbid();
             }
-            return Forbid();
+            catch(NotFoundException ex)
+            {
+                return (NotFound(ex.Message));
+            }
 
+            catch(Exception ex)
+            {
+                return StatusCode(500, "Ocurrió un error inesperado: " + ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteSaleOrderDetail(int id)
+        public IActionResult DeleteSaleOrderDetail(int id, int saleOrderId)
         {
-            if (IsUserInRol("Admin"))
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return Forbid();
+            }
+
+            var actualSaleOrder = _saleOrderService.Get(saleOrderId);
+            if(actualSaleOrder == null)
+            {
+                return NotFound($"No se encontró ninguna venta con el ID: {saleOrderId}");
+            }
+
+            if (IsUserInRol("Admin") || IsUserInRol("Client") && userId == actualSaleOrder.Client.Id)
             {
                 var actualSaleOrderDetail = _saleOrderDetailService.Get(id);
                 if (actualSaleOrderDetail is null)
