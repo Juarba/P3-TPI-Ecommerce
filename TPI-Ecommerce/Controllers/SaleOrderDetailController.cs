@@ -92,19 +92,12 @@ namespace TPI_Ecommerce.Controllers
             }
 
             var saleOrderDetail = _saleOrderDetailService.Get(id);
-            if(saleOrderDetail is null)
+            if (saleOrderDetail is null)
             {
                 return NotFound($"No se encontro la linea de venta con el ID: {id}");
             }
-            var saleOrder = _saleOrderService.Get(saleOrderDetail.Id);
-            
-            if (saleOrder == null)
-            {
-                return NotFound($"No se encontró ninguna venta con el ID: {saleOrderDetail.Id}");
-            }
 
-
-            if (IsUserInRol("Admin") || (IsUserInRol("Client") && userId == saleOrder.Client.Id))
+            if (IsUserInRol("Admin"))
             {
                 return Ok(saleOrderDetail);
             }
@@ -159,30 +152,46 @@ namespace TPI_Ecommerce.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateSaleOrderDetail(int id, [FromBody] SaleOrderDetailUpdateDTO dto)
+        public IActionResult UpdateSaleOrderDetail(int id, [FromBody] SaleOrderDetailUpdateDTO dto)
         {
-            if (IsUserInRol("Admin"))
-            {         
-                try
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return Forbid();
+            }
+
+
+            var productSelected = _productService.Get(dto.ProductId);
+            if (productSelected is null)
+            {
+                return NotFound($"No se encontro el producto con el ID {dto.ProductId}");
+            }
+
+            if (productSelected.Stock < dto.Amount)
+                return BadRequest("Stock Insuficiente");
+
+            if (dto.Amount <= 0)
+            {
+                return BadRequest("La cantidad debe ser mayor que 0");
+            }
+
+            if (IsUserInRol("Admin") || IsUserInRol("Client"))
+            {
+                _productService.Update(productSelected.Id, new ProductUpdateDto()
                 {
-                    _saleOrderDetailService.Update(id, dto);
-                    return NoContent();
-                }
-                catch (NotFoundException e)
-                {
-                    return BadRequest(e.Message);
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, "Ocurrio un error inesperado: " + e.Message);
-                }
+                    Price = productSelected.Price,
+                    Stock = productSelected.Stock - dto.Amount,
+                });
+
+                _saleOrderDetailService.Update(id, dto);
+                return Ok("La línea de venta fue modificada");
             }
             return Forbid();
-              
+
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteSaleOrderDetail(int id)
+        public IActionResult DeleteSaleOrderDetail(int id)
         {
             if (IsUserInRol("Admin"))
             {
@@ -192,8 +201,6 @@ namespace TPI_Ecommerce.Controllers
                 return NotFound($"No se encontró la la linea de venta con el ID: {id}");
 
                 }
-        
-            
                 _saleOrderDetailService.Delete(id);
                 return Ok($"La linea de venta con ID {id} fue eliminada");
             }

@@ -39,13 +39,17 @@ namespace TPI_Ecommerce.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var product = _service.Get(id);
-            if(product is null)
+            if(IsUserInRol("Client") || IsUserInRol("Admin"))
             {
-                return NotFound($"No se encontró el producto con ID: {id}");
+                var product = _service.Get(id);
+                if (product is null)
+                {
+                    return NotFound($"No se encontró el producto con ID: {id}");
+                }
+
+                return Ok(product);
             }
-            
-            return Ok(product);
+            return Forbid(); 
         }
 
         [HttpPost]

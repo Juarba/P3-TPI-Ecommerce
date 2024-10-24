@@ -15,11 +15,13 @@ namespace TPI_Ecommerce.Controllers
     [Authorize]
     public class SaleOrderController : ControllerBase
     {
-        private readonly ISaleOrderService _service;
+        private readonly ISaleOrderService _saleOrderService;
+        private readonly IClientService _clientService;
 
-        public SaleOrderController(ISaleOrderService service)
+        public SaleOrderController(ISaleOrderService saleOrderService, IClientService clientService)
         {
-            _service = service;
+            _saleOrderService = saleOrderService;
+            _clientService = clientService;
         }
 
         private bool IsUserInRol(string rol)
@@ -42,7 +44,7 @@ namespace TPI_Ecommerce.Controllers
         {
             if (IsUserInRol("Admin"))
             {
-                var saleOrder = _service.Get(id);
+                var saleOrder = _saleOrderService.Get(id);
                 if (saleOrder is null)
                 {
                     return NotFound($"No se encontró la venta con ID: {id}");
@@ -60,12 +62,20 @@ namespace TPI_Ecommerce.Controllers
             {
                 return Forbid();
             }
+
+            var client = _clientService.Get(clientId);
+            if (client is null)
+            {
+                return NotFound($"No se encontró al cliente con ID: {clientId}");
+            }
+
             if (IsUserInRol("Admin") || (IsUserInRol("Client") && userId == clientId))
             {
-                var saleOrders = _service.GetAllByClient(clientId);
+                var saleOrders = _saleOrderService.GetAllByClient(clientId);
+                
                 if (saleOrders.Count == 0)
                 {
-                    return NotFound($"No se encontró al cliente con ID: {clientId}");
+                    return BadRequest($"El cliente con ID: {clientId} todavía no hizo ninguna compra");
 
                 }
                 return Ok(saleOrders);
@@ -86,10 +96,22 @@ namespace TPI_Ecommerce.Controllers
             {
                 return Forbid();
             }
+
+            var client = _clientService.Get(saleOrderCreate.ClientId);
+            if (client is null)
+            {
+                return NotFound($"No se encontró al cliente con ID: {saleOrderCreate.ClientId}");
+            }
+
+            if(saleOrderCreate.PaymentMethod.ToLower() != "efectivo" && saleOrderCreate.PaymentMethod.ToLower() != "tarjeta")
+            {
+                return BadRequest("La compra debe ser sólo en efectivo o tarjeta");
+            }
+
             if (IsUserInRol("Admin") || (IsUserInRol("Client") && userId == saleOrderCreate.ClientId))
             {
-                _service.Add(saleOrderCreate);
-                return Ok("Creada la venta para el cliente");
+                _saleOrderService.Add(saleOrderCreate);
+                return Ok($"Creada la venta para el cliente ID: {saleOrderCreate.ClientId}");
             }
             return Forbid();
         }
@@ -102,13 +124,13 @@ namespace TPI_Ecommerce.Controllers
             {
                 return Forbid();
             }
-            var saleOrder = _service.Get(id);
+            var saleOrder = _saleOrderService.Get(id);
             if (saleOrder is null)
                 return NotFound($"No se encontró la venta con ID: {id}");
 
             if (IsUserInRol("Admin") || (IsUserInRol("Client") && userId == saleOrder.Client.Id))
             {
-                _service.Delete(id);
+                _saleOrderService.Delete(id);
                 return Ok($"Venta con ID: {id} eliminada");
             }
             return Forbid();
@@ -120,9 +142,20 @@ namespace TPI_Ecommerce.Controllers
         {
             if (IsUserInRol("Admin"))
             {
+                var saleOrder = _saleOrderService.Get(id);
+                if(saleOrder == null)
+                {
+                    return NotFound($"No se encontró la venta con el ID: {id}");
+                }
+
+                if(saleOrderUpdate.PaymentMethod.ToLower() != "efectivo" && saleOrderUpdate.PaymentMethod.ToLower() != "tarjeta")
+                {
+                    return BadRequest("La compra debe ser sólo en efectivo o tarjeta");
+                }
+
                 try
                 {
-                    _service.Update(id, saleOrderUpdate);
+                    _saleOrderService.Update(id, saleOrderUpdate);
                     return Ok("Orden modificada exitosamente");
                 }
                 catch(NotFoundException e)
