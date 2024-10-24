@@ -11,6 +11,7 @@ namespace Application.Models.Responses
     {
         public int Id { get; set; }
         public int Amount { get; set; }
+        public int SaleOrderId { get; set; }
         public ProductResponseDTO? Product { get; set; }
     }
 }

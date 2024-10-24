@@ -24,6 +24,7 @@ namespace Application.Services
         public List<SaleOrderResponseDTO> GetAllByClient(int clientId)
         {
             var saleOrders = _repository.GetAllByClient(clientId);
+
             return saleOrders.Select(s => new SaleOrderResponseDTO
             {
                 Id = s.Id,
@@ -90,6 +91,7 @@ namespace Application.Services
             {
                 ClientId = createSaleOrder.ClientId,
                 PaymentMethod = createSaleOrder.PaymentMethod,
+                
             };
             
             _repository.Add(saleOrder);
@@ -98,15 +100,14 @@ namespace Application.Services
 
         public void Update(int id, SaleOrderUpdateDTO update) 
         {
-            var product = _repository.Get(id);
-            if (product is null)
+            var saleOrder = _repository.Get(id);
+            if (saleOrder is null)
                 throw new NotFoundException();
 
-
             if(update.PaymentMethod != string.Empty)
-                product.PaymentMethod=update.PaymentMethod;
+                saleOrder.PaymentMethod=update.PaymentMethod;
                 
-            _repository.Update(product);
+            _repository.Update(saleOrder);
         }
 
         public void Delete(int id) 

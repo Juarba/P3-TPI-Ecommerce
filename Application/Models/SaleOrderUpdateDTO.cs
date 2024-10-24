@@ -10,13 +10,7 @@ namespace Application.Models
 {
     public class SaleOrderUpdateDTO
     {
-        
- 
-        
-        public bool? Shipment { get; set; } = null;
-        
+        [Required]
         public string PaymentMethod { get; set; } = string.Empty;
-
-   
     }
 }
