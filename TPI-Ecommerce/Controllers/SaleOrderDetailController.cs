@@ -174,6 +174,13 @@ namespace TPI_Ecommerce.Controllers
                     return NotFound($"No se encontró la venta con ID: {saleOrderId}");
                 }
 
+                var saleOrderDetail = _saleOrderDetailService.Get(id);
+                if(saleOrderDetail is null)
+                {
+                    return NotFound($"No se encontró la línea de venta con el ID: {id}");
+                }
+
+
                 if (productSelected.Stock < dto.Amount)
                     return BadRequest("Stock Insuficiente");
 
@@ -182,12 +189,24 @@ namespace TPI_Ecommerce.Controllers
                     return BadRequest("La cantidad debe ser mayor que 0");
                 }
 
+                int previousAmount = saleOrderDetail.Amount;
+                int newAmount = dto.Amount;
+
+                if(newAmount > previousAmount)
+                {
+                    productSelected.Stock -= (newAmount - previousAmount);
+                }
+                else
+                {
+                    productSelected.Stock += (previousAmount - newAmount);
+                }
+
                 if (IsUserInRol("Admin") || IsUserInRol("Client") && userId == actualSaleOrder.Client.Id)
                 {
                     _productService.Update(productSelected.Id, new ProductUpdateDto()
                     {
                         Price = productSelected.Price,
-                        Stock = productSelected.Stock - dto.Amount,
+                        Stock = productSelected.Stock
                     });
 
                     _saleOrderDetailService.Update(id, dto, saleOrderId);
